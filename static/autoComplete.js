@@ -346,6 +346,7 @@
     _createClass(autoComplete, [{
       key: "search",
       value: function search(query, record) {
+        if (query.indexOf('+')>-1) { return }
         var recordLowerCase = record.toLowerCase();
         if (this.searchEngine === "loose") {
           query = query.replace(/ /g, "");

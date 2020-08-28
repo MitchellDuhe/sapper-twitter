@@ -13,12 +13,21 @@
     $: strokeWidth = centered ? 4 : 2;
 
     let showDropdown = false;
+    let selectedIndex = 0;
     function handleKeydown(event){
         showDropdown = true;
         if (event.keyCode === 13 && returnEnd){
             returnEnd = false;
             activeButton = true;
             enterSearch()
+        } else if (event.keyCode === 38) {//up
+            selectedIndex = selectedIndex - 1;
+            if (selectedIndex < 0) selectedIndex = 0;
+        } else if (event.keyCode === 40) {//down
+            selectedIndex = selectedIndex + 1;
+            if (selectedIndex >= topResults.length-1) selectedIndex = topResults.length-1;
+        } else {
+            selectedIndex = 0;
         }
     }
 
@@ -31,9 +40,11 @@
     }
 
     function enterSearch(){
-        
         showDropdown = false;
+        let selected = topResults[selectedIndex]
+        search.value = selected.value[selected.key]
         dispatch('decenter')
+        // selectedIndex = 0;
     }
 
     onMount(()=>{
@@ -47,8 +58,21 @@
 
     let topResults = [];
     const handleAutoComplete = e => {
-        // console.log(e.detail.results)
         topResults = e.detail.results;
+        topResults = filterTopResults(topResults)
+    }
+    
+    const filterTopResults =(results)=>{
+        let used = []
+        let trimmed = results.filter(result=>{
+        if (used.indexOf(result.index)>-1){
+            return false
+        } else {
+            used.push(result.index)
+            return true
+        }
+        })
+        return trimmed.slice(0,5)
     }
 </script>
 
@@ -73,7 +97,7 @@ class:centered
             bind:this={search}
             bind:value={searchText}>
             
-        <Autocomplete {searchText} {centered} {showDropdown} {topResults} />
+        <Autocomplete {searchText} {centered} {showDropdown} {topResults} {selectedIndex} />
     </div>      
     <button 
         bind:this={button} 

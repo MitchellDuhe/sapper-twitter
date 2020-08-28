@@ -4,21 +4,7 @@
   export let searchText = '';
   export let centered = true;
   export let topResults = [];
-  $:topResults = filterTopResults(topResults)
-  
-  const filterTopResults =(results)=>{
-    let used = []
-    let trimmed = results.filter(result=>{
-      if (used.indexOf(result.index)>-1){
-        return false
-      } else {
-        used.push(result.index)
-        return true
-      }
-    })
-    return trimmed.slice(0,5)
-  }
-
+  export let selectedIndex = 0;
   export let showDropdown = false;
   // autoComplete.js on type event emitter
 
@@ -46,7 +32,8 @@
       {#each topResults as person,i}
         <div 
           class="entry" 
-          class:lastChild="{i+1===topResults.length}">
+          class:lastChild="{i+1===topResults.length}"
+          class:selected="{i===selectedIndex}">
           <div class="name">
             <p>{person.value.name}</p>
           </div>
@@ -61,7 +48,6 @@
 {/if}
   
 <style>
-
   .dropdown{
     background-color:  var(--lighter-color);
     display: flex;
@@ -73,13 +59,13 @@
     box-sizing:border-box;
   }
 
-  .dropdown.centered .entry.entry.lastChild {
+  .dropdown.centered .entry.lastChild {
     border-bottom-left-radius:25px;
     border-bottom-right-radius:25px;
   }
 
   .entry.lastChild {
-    transition: 0s;
+    /* transition: 0s; */
     border-bottom-left-radius:12.5px;
     border-bottom-right-radius:12.5px;
   }
@@ -98,6 +84,7 @@
   }
 
   .entry {
+    transition: border-radius 0s;
     padding: .2rem .75rem;
     margin:-1px 0;
     display: flex;
@@ -110,13 +97,13 @@
     padding: .33rem 1rem;
   }
 
-  .entry:hover {
-    transition: 200ms ease;
+  .entry:hover, .entry.selected {
+    transition: 200ms ease, border-radius 0ms 0ms;
     background-color: var(--light-color);
   }
 
   .entry * {
-    transition: all 400ms ease-out 0ms;
+    transition: all 400ms ease-out 0ms, border-radius 0ms 0ms;
     margin:0;
     font-size: .75rem;
   }
