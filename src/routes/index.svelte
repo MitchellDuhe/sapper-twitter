@@ -14,6 +14,7 @@
 	import { onMount } from 'svelte'
 	import Searchbar from './Searchbar.svelte'
 	import Graph from './Graph.svelte'
+	import Plot from './Plot.svelte'
 	import createAutoComplete from './autoComplete.js';
 	onMount(()=>{
 		if (!(posts === undefined)){
@@ -35,7 +36,7 @@
 	</div>
 	{#if !centered}
 		<div class="graph-container">
-			<Graph />
+			<Plot />
 		</div>
 	{/if}
 </div>
