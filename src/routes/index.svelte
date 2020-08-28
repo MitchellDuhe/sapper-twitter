@@ -19,6 +19,7 @@
 	let centered=true;
 	function decenter(){
 		centered = false;
+		
 	}
 </script>
 
@@ -26,7 +27,6 @@
 	<div 
 		class:centered
 		class="searchbar-container centered">
-		<!-- <p></p> -->
 		<Searchbar on:decenter={decenter} {centered}/>
 	</div>
 	{#if !centered}

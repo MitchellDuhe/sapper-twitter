@@ -1,12 +1,11 @@
 <script>
-  // import data from './db/data.json'
+  import { createEventDispatcher} from 'svelte'
 	import { fade } from 'svelte/transition';
   export let searchText = '';
   export let centered = true;
   export let topResults = [];
   export let selectedIndex = 0;
   export let showDropdown = false;
-  // autoComplete.js on type event emitter
 
   function truncateFollowers(number){
     let reduced = Number(number).toLocaleString();
@@ -20,10 +19,23 @@
     return reduced;
   }
 
+  const dispatch = createEventDispatcher()
+  function handleHover(i){
+    dispatch('entryHover',{index:i})
+  }
+
+  function handleClick(i){
+    dispatch('entryClick',{index:i})
+  }
+
 </script>
 
 {#if searchText.length > 0 && showDropdown}
-  <div in:fade="{{duration:200}}" class="dropdown" class:centered>
+  <div 
+    in:fade="{{duration:200}}" 
+    class="dropdown" 
+    class:centered
+    class:firstHover="{selectedIndex===0}">
     {#if topResults.length === 0}
       <div class="entry lastChild">
         <p>No Results</p>
@@ -31,6 +43,8 @@
     {:else}
       {#each topResults as person,i}
         <div 
+          on:mouseenter={()=>{handleHover(i)}}
+          on:click={()=>{handleClick(i)}}
           class="entry" 
           class:lastChild="{i+1===topResults.length}"
           class:selected="{i===selectedIndex}">
@@ -48,6 +62,10 @@
 {/if}
   
 <style>
+  .dropdown.firstHover{
+    transition: 200ms ease, border-radius 0ms 0ms;
+    background-color:  var(--light-color);
+  }
   .dropdown{
     background-color:  var(--lighter-color);
     display: flex;
@@ -76,7 +94,7 @@
   }
 
   .dropdown.centered{
-    margin-top: -2.4rem;
+    margin-top: -2.2rem;
     padding-top: 1.5rem;
     height:3.9rem;
     border-bottom-left-radius:25px;
