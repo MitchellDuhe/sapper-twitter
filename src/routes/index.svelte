@@ -2,6 +2,8 @@
 	export function preload({ params, query }) {
 		return this.fetch(`index.json`).then(r => r.json()).then(posts => {
 			return { posts };
+		}).catch((err)=>{
+			console.log(err)
 		});
 	}
 </script>
@@ -14,7 +16,9 @@
 	import Graph from './Graph.svelte'
 	import createAutoComplete from './autoComplete.js';
 	onMount(()=>{
-		createAutoComplete(posts)
+		if (!(posts === undefined)){
+			createAutoComplete(posts)
+		}
 	})
 	let centered=true;
 	function decenter(){

@@ -10,14 +10,27 @@ import { init } from '@lib/mongo'
 // console.log(contents)
 
 export async function get(req, res) {
-
+	// console.log(user data attempted)
 	const { UserData } = await init();
 
-  const data = await UserData.find()//{handle:"BarackObama"})
-  
+  	const data = await UserData.find();
 	res.writeHead(200, {
 		'Content-Type': 'application/json'
 	});
-
-	res.end(JSON.stringify(data));
+	
+	if (data === undefined){
+		res.end({failure:true});
+	} else {
+		res.end(JSON.stringify(data));
+	}
 }
+
+// const validJSON = (text)=>{
+// 	try {
+// 		return  (/^[\],:{}\s]*$/.test(text.replace(/\\["\\\/bfnrtu]/g, '@').
+// 		replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']').
+// 		replace(/(?:^|:|,)(?:\s*\[)+/g, '')))
+// 	} catch (err) {
+// 		return false
+// 	}
+// }
