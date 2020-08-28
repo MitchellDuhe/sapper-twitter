@@ -31,7 +31,7 @@
         }
     }
 
-    function handleKeyup(){
+    function handleKeyup(event){
         if (event.keyCode === 13){ 
             returnEnd = true;
             activeButton = false;
@@ -41,10 +41,12 @@
 
     async function enterSearch(){
         showDropdown = false;
-        let selected = topResults[selectedIndex]
-        search.value = selected.value[selected.key]
-        dispatch('decenter')
-        await tick()
+        let selected = topResults[selectedIndex];
+        search.value = selected.value[selected.key];
+        dispatch('decenter');
+        await tick();
+        search.blur();
+        activeButton = false;
     }
 
     onMount(()=>{
@@ -74,6 +76,16 @@
         })
         return trimmed.slice(0,5)
     }
+
+    const handleEntryHover = (event)=>{
+        selectedIndex = event.detail.index;
+    }
+    
+    const handleEntryClick = (event)=>{
+        selectedIndex = event.detail.index;
+        enterSearch();
+    }
+
 </script>
 
 <svelte:body 
@@ -97,7 +109,9 @@ class:centered
             bind:this={search}
             bind:value={searchText}>
             
-        <Autocomplete {searchText} {centered} {showDropdown} {topResults} {selectedIndex} />
+        <Autocomplete {searchText} {centered} {showDropdown} {topResults} {selectedIndex} 
+            on:entryHover={handleEntryHover}
+            on:entryClick={handleEntryClick}/>
     </div>      
     <button 
         bind:this={button} 
@@ -133,6 +147,7 @@ class:centered
         font-size: 16px;
     }
     .search-button{
+        cursor: pointer;
         height: 25px;
         width:25px;
         margin:0 0.5rem;
@@ -142,8 +157,13 @@ class:centered
         padding:0;
         background-color: var(--lighter-color);
     }
+
+    .search-button:hover{
+        background-color: var(--light-color);
+    }
+
     .search-button:active,.activeButton{
-        background-color: var(--lighter-color);
+        background-color: var(--dark-color);
     }
 
     .search-and-button.centered{
