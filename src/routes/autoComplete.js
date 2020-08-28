@@ -27,7 +27,7 @@ const createAutocomplete = (src)=>{
     placeHolder: "Type Here",
     selector: "#autoComplete",
     debounce: 0,
-    searchEngine: "strict",
+    searchEngine: "loose",
     highlight: true,
     maxResults: 10,
     resultsList: {

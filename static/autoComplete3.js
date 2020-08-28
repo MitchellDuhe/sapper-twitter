@@ -108,9 +108,7 @@
     selectedResult: "autoComplete_selected"
   };
   var keys = {
-    ENTER: 13,
-    ARROW_UP: 38,
-    ARROW_DOWN: 40
+    ENTER: 13
   };
   var getInput = function getInput(selector) {
     return typeof selector === "string" ? document.querySelector(selector) : selector();
@@ -346,7 +344,7 @@
     _createClass(autoComplete, [{
       key: "search",
       value: function search(query, record) {
-        if (query.indexOf('+')>-1) { return }
+        if (query.indexOf('+')>-1) { query = query.split('+').join('') }
         var recordLowerCase = record.toLowerCase();
         if (this.searchEngine === "loose") {
           query = query.replace(/ /g, "");

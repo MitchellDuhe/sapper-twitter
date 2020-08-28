@@ -39,12 +39,12 @@
         }
     }
 
-    function enterSearch(){
+    async function enterSearch(){
         showDropdown = false;
         let selected = topResults[selectedIndex]
         search.value = selected.value[selected.key]
         dispatch('decenter')
-        // selectedIndex = 0;
+        await tick()
     }
 
     onMount(()=>{
