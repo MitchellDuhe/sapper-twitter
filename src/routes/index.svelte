@@ -1,31 +1,36 @@
 <script context="module">
-	export function preload({ params, query }) {
-		return this.fetch(`index.json`).then(r => r.json()).then(posts => {
-			return { posts };
-		}).catch((err)=>{
-			console.log(err)
-		});
+	export async function preload({ params, query }) {
+		const res = await this.fetch(`UserData.json`);
+		const data = await res.json();
+
+		if (res.status === 200) {
+			return { users: data };
+		} else {
+			this.error(res.status, data.message);
+		}
 	}
 </script>
 
 <script>
-	export let posts;
-	
+	export let users;
 	import { onMount } from 'svelte'
 	import Searchbar from './Searchbar.svelte'
 	import Graph from './Graph.svelte'
 	import Plot from './Plot.svelte'
 	import createAutoComplete from './autoComplete.js';
 	onMount(()=>{
-		if (!(posts === undefined)){
-			createAutoComplete(posts)
+		if (!(users === undefined)){
+			createAutoComplete(users)
 		}
 	})
 	let centered=true;
-	function decenter(){
+	function decenter(event){
 		centered = false;
-		
+		user = event.detail.handle
+		displayedSearch = event.detail.displayedSearch
 	}
+	let user = {handle:'none-selected'};
+	let displayedSearch;
 </script>
 
 <div class="content">
@@ -36,16 +41,12 @@
 	</div>
 	{#if !centered}
 		<div class="graph-container">
-			<Plot />
+			<Plot {user} {displayedSearch}/>
 		</div>
 	{/if}
 </div>
 
 <style>
-
-	.graph-container{
-		background-color: black;
-	}
 	.searchbar-container.centered{
 		left:50%;
 		top:33%;

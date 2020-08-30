@@ -1,17 +1,20 @@
 <script>
     import { tick, createEventDispatcher, onMount } from 'svelte'
+    const dispatch = createEventDispatcher();
     import SearchIcon from './SearchIcon.svelte'
     import Autocomplete from './Autocomplete.svelte'
 
-    const dispatch = createEventDispatcher();
+    export let centered = true;
     let button, search;
+    let strokeWidth = 4;
+    $: strokeWidth = centered ? 4 : 2;
+    
+    //================
+	//   searchning
+	//================
+    
     let activeButton = false;
     let returnEnd = true;
-    let strokeWidth = 4;
-    export let centered = true;
-
-    $: strokeWidth = centered ? 4 : 2;
-
     let showDropdown = false;
     let selectedIndex = 0;
     function handleKeydown(event){
@@ -42,8 +45,12 @@
     async function enterSearch(){
         showDropdown = false;
         let selected = topResults[selectedIndex];
-        search.value = selected.value[selected.key];
-        dispatch('decenter');
+        let displayedSearch = selected.value[selected.key];
+        search.value = displayedSearch;
+        dispatch('decenter',{
+            handle: selected.value.handle,
+            displayedSearch
+        });
         await tick();
         search.blur();
         activeButton = false;
@@ -76,6 +83,10 @@
         })
         return trimmed.slice(0,5)
     }
+
+    //=================
+    //    mouse
+    //=================
 
     const handleEntryHover = (event)=>{
         selectedIndex = event.detail.index;

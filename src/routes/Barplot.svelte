@@ -1,56 +1,104 @@
 <script>
 	import { onMount,createEventDispatcher,tick } from 'svelte'
-	// import { peopleData } from '../public/db/stores.js'
-	// import { userTweetData } from '../public/db/userTweetData.js'
-	// import { tweets } from '../public/db/tweets.js'
-	// import { users } from '../public/db/users.js'
+	const dispatch = createEventDispatcher();
 	import FollowersBar from './FollowersBar.svelte';
 	import Loading from './Loading.svelte'
-	let barWidth = 30;
-	let barSpace = 10;
-	export let plotHeight = 500;
-	let plot;
+	import { userTweetData } from './userTweetData.js'
 
-	const dispatch = createEventDispatcher();
-	
-	$: userTweetData.set({	
-		length:wordCount.length,
-		max:wordCount[0][1],
-		gt1length:wordCount.filter(x=>x[1]>1).length
+	//===============
+	//     init
+	//===============
+	let loadingText = 'Loading Plot...' 
+
+	let userTweets = [];
+	let wordCount = [[0,0]];
+	let waiting = true;
+	let userId;
+	let tweets;	
+	let dbInfo;
+	export let user;
+	onMount(async ()=>{
+		dbInfo = await getUserDBinfo(user);
+		userId = dbInfo._id;
+		userTweets = await getTweets(userId);
+		wordCount = await countWords(userTweets)
+		waiting = false;
+		console.log(wordCount)
 	})
 
-	$: scale  = d3.scaleLinear()
-								.domain([0,Math.round($userTweetData.max/10)*10])
-								.range([0, plotHeight-32]);
+	//================
+	//		plot dims
+	//================
+	
+	export let plotHeight = 500;
+	export let windowWidth;
+	let plot;
+	let barWidth = 30;
+	let barSpace = 10;	
+	let plotWidth;
+
+	$: fullWordList = $userTweetData.length < 100
+	const getPlotWidth = (waiting)=>{
+		let width
+		if (!waiting){
+			if (fullWordList){
+				width = $userTweetData.length*( barWidth + barSpace ) + 20;
+			} else {
+				width = $userTweetData.gt1length*( barWidth + barSpace ) + 20;
+			}
+			dispatch('plotWidthChange')
+		} else {
+			width = (windowWidth/2)-16 //adjusted for rem offset. Border box sizing messes up other padding
+		}
+		return width
+	}
+
+	//================
+	//	handletweets
+	//================
+	async function getUserDBinfo(user){
+    const res = await fetch(`user/${user}.json`);
+		const resJSON = await res.json();
+		return resJSON
+	}
+	
+	async function getTweets(userId){
+    const res = await fetch(`tweets/${userId}.json`);
+		const resJSON = await res.json();
+		return resJSON
+	}
+
+	function waitX(t){ 
+    return new Promise((resolve,reject)=>{
+      setTimeout(resolve,t)
+    });
+	}
 
 	const getUserTweets = async (user)=>{
 		let tweetsText = []
 		loadingText = 'Getting Tweets...'
 		await waitX(50)
-		user.tweets.forEach(id=>{
-			let matches =  $tweets.filter(x=>x._id.toString().indexOf(id.slice(1,14))>-1)
-			if (matches.length > 1) {
-				console.log ("similar tweet ID")
-			} else if (matches.length === 0) {
-				console.log('no match, ', id)
-				return
-			}
-			tweetsText.push(matches[0].text)
-		})
+		// the broccoli 
+		// user.tweets.forEach(id=>{
+		// 	let matches =  $tweets.filter(x=>x._id.toString().indexOf(id.slice(1,14))>-1)
+		// 	if (matches.length > 1) {
+		// 		console.log ("similar tweet ID")
+		// 	} else if (matches.length === 0) {
+		// 		console.log('no match, ', id)
+		// 		return
+		// 	}
+		// 	tweetsText.push(matches[0].text)
+		// })
 		return tweetsText
 	}	
-
-  function waitX(t){ 
-    return new Promise((resolve,reject)=>{
-      setTimeout(resolve,t)
-    });
-	}
 	
-	const countWords = async (tweets)=>{
-		let wordDict = {} 
+	const countWords = async (userTweets)=>{
 		loadingText = 'Counting Words...'
+		let wordDict = {} 
+		let tweets = userTweets.tweets
 		await waitX(100)
-		tweets.forEach(tweet=>{
+		tweets.forEach(tweetData=>{
+			let tweet = tweetData.tweet
 			tweet.split(' ').forEach(word=>{
 				if (word in wordDict){
 					wordDict[word]+=1;
@@ -61,47 +109,48 @@
 		})
 		return Object.entries(wordDict).sort((a,b)=>b[1]-a[1])
 	}
-	export let handleName;
-	let user = $users.find(x=>x.handle===handleName);
-	let userTweets = [];
-	let wordCount = [[0,0]];
-	let waiting = true;
-	onMount(async ()=>{
-		userTweets = await getUserTweets(user);
-		wordCount = await countWords(userTweets);	
-		// console.log(wordCount)
-		waiting = false;
-	})
+
+	//================================================================
+	//	     $: calls after wordcount. must be in this order
+	//================================================================
+
+
+	$: editUserTweetData(wordCount)
+	function editUserTweetData(wordCount){
+		userTweetData.set({	
+			length:wordCount.length,
+			max:wordCount[0][1],
+			gt1length:wordCount.filter(x=>x[1]>1).length
+		})
+	}
+	let scale; 
+	$: scale = scaleYaxis($userTweetData)
 	
-	export let windowWidth;
-	const getPlotWidth = (waiting)=>{
-		let width
-		if (!waiting){
-			width = $userTweetData.gt1length*( barWidth + barSpace ) + 20;
-			dispatch('plotWidthChange')
+	function scaleYaxis(data){
+		let ymax;
+		if (data.max > 5){
+			ymax = Math.round(data.max/10)*10;
 		} else {
-			width = (windowWidth/2)-16 //adjusted for rem offset. Border box sizing messes up other padding
+			ymax = data.max;
 		}
-		return width
+		d3.scaleLinear()
+			.domain([0,ymax])
+			.range([0, plotHeight-32]);
 	}
 
-	let plotWidth;
 	$: plotWidth = getPlotWidth(waiting)
-	let loadingText = 'Loading Plot...'
-	//plotwidth 39020 not bad 
-	//plotwidth 392420 too long
-	//maybe split each plot and lazy load or just put all one word usages another way.  
+
 </script>
 
 {#if waiting}
 	<Loading { loadingText } />
 {:else}
-<p style="visibility:hidden;height:0;position:absolute"></p>
+	<p style="visibility:hidden;height:0;position:absolute"></p>
 {/if}
 <svg class="plot" width={plotWidth} height={plotHeight+32} bind:this={plot}>
 	<p></p>
 	{#each 	wordCount as word,index} 
-		{#if word[1] > 1}
+		{#if (word[1] > 1 || fullWordList)}
 			<FollowersBar 
 				value={scale(word[1])} 
 				{index} 
@@ -113,9 +162,7 @@
 	{/each}
 </svg>
 
-
 <style>
-
 	svg {
 		color:black;
 		fill: black;
@@ -133,14 +180,10 @@
 		background-color: beige;
 		padding:0 1rem 2rem 0;
 		cursor: grab;
-		/* width:50vw; */
 	}
 
 	.plot:active{
 		cursor: grabbing;
 	}
-
-
-
 
 </style>

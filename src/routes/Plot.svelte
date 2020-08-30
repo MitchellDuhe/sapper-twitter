@@ -3,29 +3,14 @@
   import { onMount,afterUpdate,tick } from 'svelte'
   import Barplot from './Barplot.svelte'
   import PlotControls from './PlotControls.svelte'
-	// import { userTweetData } from '../public/db/userTweetData.js'
+	import { userTweetData } from './userTweetData.js'
+  
+  export let user;
   
   let plotWindow;
-  let scrollOnRelease = 0;
-
-  const handlePanMove = (event)=>{
-    plotWindow.scrollLeft = plotWindow.scrollLeft + (-event.detail.dx)
-    scrollOnRelease = event.detail.dx 
-  }
-  const handlePanEnd = ()=>{
-    decayScroll()
-  }
-
-  const decayScroll = async ()=>{
-    let decay = scrollOnRelease/10;
-    while (Math.abs(scrollOnRelease) > 10) {
-      plotWindow.scrollLeft = plotWindow.scrollLeft - scrollOnRelease
-      await waitX(10)
-      scrollOnRelease = scrollOnRelease-decay
-      decay = decay*.85
-      if (Math.abs(decay) < 0.75 ) { decay = decay > 0 ? 0.75 : -0.75 }
-    }
-  }
+  //==================
+  //      axis
+  //==================
 
   let yAxis;
   let plotHeight;
@@ -36,7 +21,7 @@
     handleResize();
     showPlot=true;
     await tick();
-    handleScroll()
+    handleScroll();
   })
   const sizeYaxis = (data)=>{
     if (data.max === 0) { return }
@@ -56,8 +41,41 @@
   
   $: sizeYaxis($userTweetData)
 
-  let distanceToEnd = 50;
+  let windowWidth;
+  const handleResize = ()=>{
+    plotHeight = window.innerHeight*0.80;
+    sizeYaxis($userTweetData);
+  }
 
+  //==================
+  //     scrolling
+  //==================
+  let scrollOnRelease = 0;
+  const handlePanMove = (event)=>{
+    plotWindow.scrollLeft = plotWindow.scrollLeft + (-event.detail.dx)
+    scrollOnRelease = event.detail.dx 
+  }
+  const handlePanEnd = ()=>{
+    decayScroll()
+  }
+
+  const decayScroll = async ()=>{
+    let decay = scrollOnRelease/10;
+    while (Math.abs(scrollOnRelease) > 10) {
+      plotWindow.scrollLeft = plotWindow.scrollLeft - scrollOnRelease
+      await waitX(10)
+      scrollOnRelease = scrollOnRelease-decay
+      decay = decay*.85
+      if (Math.abs(decay) < 0.75 ) { decay = decay > 0 ? 0.75 : -0.75 }
+    }
+    function waitX(t){ 
+      return new Promise((resolve,reject)=>{
+        setTimeout(resolve,t)
+      });
+    }
+  }
+  
+  let distanceToEnd = 50;
   const handleScroll = async ()=>{ 
     await tick()
     distanceToEnd = plotWindow.scrollWidth - (plotWindow.scrollLeft + plotWindow.offsetWidth);
@@ -66,48 +84,17 @@
     }
   }
 
-  const handleResize = ()=>{
-    plotHeight = window.innerHeight*0.80;
-    sizeYaxis($userTweetData);
-  }
-  let countingDone = true;
-  let windowWidth;
-
-  let handleName = "NASA"
-
-  function waitX(t){ 
-    return new Promise((resolve,reject)=>{
-      setTimeout(resolve,t)
-    });
-  }
-  
-  // let continuousAsync = async ()=>{
-  //   let state = true;
-  //   while (true){
-  //     await waitX(1000)
-  //     if (state){
-  //       plotHeader = "Example Plot 2"
-  //     } else {
-  //       plotHeader = "Example Plot 1"
-  //     }
-  //     state = !state
-  //     await tick();
-  //   }
-  // }
-
-  // continuousAsync()
+  export let displayedSearch;
 </script>
 
 <svelte:window 
   on:resize={handleResize}
   bind:innerWidth={windowWidth}/>
-<!-- {#if countingDone}
-  <p>loading app...</p>
-{/if} -->
+
 {#if showPlot}
 <div class="container">
   <div class="header">
-    { handleName } Weekly Word Usage
+    { displayedSearch } Weekly Word Usage
   </div>
   <div class="plot-and-axis">
     <svg
@@ -122,7 +109,7 @@
       on:panmove={handlePanMove}
       on:panend={handlePanEnd}
       bind:this={plotWindow}>
-      <Barplot {plotHeight} {windowWidth} {handleName}
+      <Barplot {plotHeight} {windowWidth} {user}
         on:plotWidthChange={handleScroll}/>
     </div>
     <div 
@@ -163,7 +150,6 @@
 
   .y-axis{
     width:50px;
-    /* padding: calc(2rem - 10px) 0; */
     padding-bottom: calc(2rem - 5px);
     padding-top:calc(1rem + 5px); ;
     margin-bottom: 0;

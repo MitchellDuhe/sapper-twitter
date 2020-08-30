@@ -8,11 +8,8 @@
   }
   
   $: forceFadeInOut(loadingText)
-  // export let plotGenerated;
-  // $:console.log(loadingText)
 </script>
 
-<!-- {#if !plotGenerated} -->
   {#if fadeInOut}
   <p 
     class="loading"
@@ -22,7 +19,6 @@
       class="loading"
       transition:fade> {loadingText} </p>
   {/if}
-<!-- {/if} -->
 
 <style>
 

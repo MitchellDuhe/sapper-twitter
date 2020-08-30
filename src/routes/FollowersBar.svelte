@@ -2,29 +2,28 @@
   import { tweened } from 'svelte/motion'
   import * as easings from 'svelte/easing';
   import { onMount } from 'svelte';
+  
+  let x,y;
+  let SVGlength
+  let dx=0;
+  let dy=0;
+  
   export let value = 0
-
-
+  export let index = 0;
+  export let barWidth = 20;
+  export let barSpace = 20;
+  export let final = false;
+  export let text = 'loading...';
+  
   const height = tweened(0,{
     delay:0,
     duration:1000,
     easing:easings.elasticOut
   })
-
-  export let index = 0;
-  let x,y;
-  export let barWidth = 20;
-  export let barSpace = 20;
-  export let final = false;
-  export let text = 'loading...';
+  
   $: x = index*( barWidth + barSpace );
   $: y = 0;
   $: height.set(value);
-
-  let SVGlength
-
-  let dx=0;
-  let dy=0;
   
   onMount(()=>{
     let length = SVGlength.textLength.baseVal.value;
@@ -56,12 +55,8 @@
 <style>  
   .sub-bar{
     transform-origin: 30px 0px;
-    /* transform: translate(8px, 10px) scaleY(-1); */
-    /* transform: translate(0px,45px) rotate(45deg) scaleY(-1); */
-    /* transform: translate(8px, 10px) rotate(45deg) scaleY(-1); */
     fill: #333;
     font-size:1rem;
-    /* font-weight: bold; */
   }
 
   .final{
