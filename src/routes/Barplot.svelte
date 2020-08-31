@@ -1,7 +1,7 @@
 <script>
 	import { onMount,createEventDispatcher,tick } from 'svelte'
 	const dispatch = createEventDispatcher();
-	import FollowersBar from './FollowersBar.svelte';
+	import Bar from './Bar.svelte';
 	import Loading from './Loading.svelte'
 	import { userTweetData } from './userTweetData.js'
 
@@ -23,7 +23,6 @@
 		userTweets = await getTweets(userId);
 		wordCount = await countWords(userTweets)
 		waiting = false;
-		console.log(wordCount)
 	})
 
 	//================
@@ -124,18 +123,14 @@
 		})
 	}
 	let scale; 
-	$: scale = scaleYaxis($userTweetData)
-	
-	function scaleYaxis(data){
-		let ymax;
-		if (data.max > 5){
-			ymax = Math.round(data.max/10)*10;
-		} else {
-			ymax = data.max;
-		}
-		d3.scaleLinear()
-			.domain([0,ymax])
-			.range([0, plotHeight-32]);
+	let badscale = true;
+	$: badscale = isNaN(scale(wordCount[0][1]));
+	export let scaleDims;
+	$: scale = scaleBars(scaleDims)
+	function scaleBars(scaleDims){
+		return d3.scaleLinear()
+			.domain([scaleDims.domain.x,scaleDims.domain.y])
+      .range([scaleDims.range.y, scaleDims.range.x]);
 	}
 
 	$: plotWidth = getPlotWidth(waiting)
@@ -150,8 +145,8 @@
 <svg class="plot" width={plotWidth} height={plotHeight+32} bind:this={plot}>
 	<p></p>
 	{#each 	wordCount as word,index} 
-		{#if (word[1] > 1 || fullWordList)}
-			<FollowersBar 
+		{#if !waiting && !badscale && (word[1] > 1 || fullWordList)}
+			<Bar
 				value={scale(word[1])} 
 				{index} 
 				text={word[0]}
@@ -167,7 +162,8 @@
 		color:black;
 		fill: black;
 		border-top-right-radius: 25px;
-    	border-bottom-right-radius: 25px;
+		border-bottom-right-radius: 25px;
+		min-width: 95%;
 	}
 
 	.plot, .plot * {

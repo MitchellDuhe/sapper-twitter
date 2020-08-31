@@ -23,28 +23,44 @@
     await tick();
     handleScroll();
   })
-  const sizeYaxis = (data)=>{
+  let scaleDims ={
+    domain:{},
+    range:{}
+  };
+  const scaleYaxis = (data)=>{
     if (data.max === 0) { return }
+    let ymax;
+		if (data.max > 5){
+			ymax = Math.round(data.max/10)*10;
+		} else {
+			ymax = data.max;
+    }
+    scaleDims.domain.x = 0;
+    scaleDims.domain.y = ymax;
+    scaleDims.range.x = plotHeight-16*remOffset;
+    scaleDims.range.y = 0;
     let scale = d3.scaleLinear()
-			.domain([0,Math.round(data.max/10)*10])
-      .range([plotHeight-16*remOffset, 0]); //this adjustment is for the 2rem offset up on the bars for the words at the bottom
+			.domain([scaleDims.domain.x,scaleDims.domain.y])
+      .range([scaleDims.range.x, scaleDims.range.y]); //this adjustment is for the rem offset up on the bars for the words at the bottom
 		let y_axis = d3.axisLeft()
-      .scale(scale);
-
+      .scale(scale)
+      .tickFormat((e) => {
+        if(Math.floor(e) != e) return;
+        return e;
+      });
     d3.select('.left-axis')
       .call(y_axis)
-    
     d3.selectAll('.tick')
       .style('font-size','0.8rem')
       .style('user-select','none')
   }
   
-  $: sizeYaxis($userTweetData)
+  $: scaleYaxis($userTweetData)
 
   let windowWidth;
   const handleResize = ()=>{
     plotHeight = window.innerHeight*0.80;
-    sizeYaxis($userTweetData);
+    scaleYaxis($userTweetData);
   }
 
   //==================
@@ -109,7 +125,7 @@
       on:panmove={handlePanMove}
       on:panend={handlePanEnd}
       bind:this={plotWindow}>
-      <Barplot {plotHeight} {windowWidth} {user}
+      <Barplot {plotHeight} {windowWidth} {user} {scaleDims}
         on:plotWidthChange={handleScroll}/>
     </div>
     <div 
@@ -120,7 +136,7 @@
       style={`right:${-50+distanceToEnd}px`}>
     </div>
   </div>
-  <!-- <PlotControls on:newNumber={sizeYaxis}/> -->
+  <!-- <PlotControls on:newNumber={scaleYaxis}/> -->
 </div>
 {/if}
 

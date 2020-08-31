@@ -135,10 +135,13 @@ class:centered
 </div>
 
 <style>
+    /* ===================== */
+    /*      decentered       */
+    /* ===================== */
     .search-and-autocomplete{
         display: flex;
         flex-direction: column;
-        width:150px;
+        width:200px;
         /* transition: all 4000ms ease-out 0ms; */
     }
     .search{
@@ -148,8 +151,16 @@ class:centered
         padding-bottom: 5%;
         z-index: 1;
         font-size: 1rem;
-        width:150px;
+        border:1px solid var(--lighter-color);
+        width:200px;
     }
+    
+    .search:focus{
+        outline: none;
+        border:1px solid var(--darkest-color);
+        box-shadow: 0 0 3px var(--lighter-color);
+    }
+
     .search-and-button{
         height:25px;
         width:100%;
@@ -177,6 +188,20 @@ class:centered
         background-color: var(--dark-color);
     }
 
+    .search-and-button, .search-and-button * {
+        transition: all 400ms ease-out 0ms;
+    }
+
+    button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* ===================== */
+    /*        centered       */
+    /* ===================== */
+
     .search-and-button.centered{
         font-size: 2rem;
     }
@@ -197,27 +222,7 @@ class:centered
         height:50px;
         border-radius: 25px;
         width:300px
-    }   
-    .search-and-button, .search-and-button * {
-        transition: all 400ms ease-out 0ms;
-    }
-
-    button {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .search:focus{
-        outline: none;
-        border:1px solid var(--darkest-color);
-        box-shadow: 0 0 3px var(--lighter-color);
-    }
-    .search {
-        border:1px solid var(--lighter-color);
-    }
-
-
+    } 
 
     .search-and-button.centered  .search:focus{
         border:2px solid var(--darkest-color);
