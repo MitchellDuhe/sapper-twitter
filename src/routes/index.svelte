@@ -39,7 +39,7 @@
 		class="searchbar-container centered">
 		<Searchbar on:decenter={decenter} {centered}/>
 	</div>
-	{#if !centered}
+	{#if !centered }
 		<div class="graph-container">
 			<Plot {user} {displayedSearch}/>
 		</div>

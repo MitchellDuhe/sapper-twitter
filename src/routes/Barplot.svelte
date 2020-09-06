@@ -3,27 +3,24 @@
 	const dispatch = createEventDispatcher();
 	import Bar from './Bar.svelte';
 	import Loading from './Loading.svelte'
+	import WordBlock from './WordBlock.svelte'
 	import { userTweetData } from './userTweetData.js'
 
 	//===============
 	//     init
 	//===============
 	let loadingText = 'Loading Plot...' 
-
-	let userTweets = [];
 	let wordCount = [[0,0]];
+	let countCount = {};
+	let wordBlocks = [];
 	let waiting = true;
-	let userId;
-	let tweets;	
-	let dbInfo;
 	export let user;
-	onMount(async ()=>{
-		dbInfo = await getUserDBinfo(user);
-		userId = dbInfo._id;
-		userTweets = await getTweets(userId);
-		wordCount = await countWords(userTweets)
-		waiting = false;
-	})
+
+	function waitX(t){ 
+    return new Promise((resolve,reject)=>{
+      setTimeout(resolve,t)
+    });
+	}
 
 	//================
 	//		plot dims
@@ -35,9 +32,10 @@
 	let barWidth = 30;
 	let barSpace = 10;	
 	let plotWidth;
+	let fullWordList = true;
 
-	$: fullWordList = $userTweetData.length < 100
 	const getPlotWidth = (waiting)=>{
+		fullWordList = $userTweetData.length < 100
 		let width
 		if (!waiting){
 			if (fullWordList){
@@ -55,6 +53,7 @@
 	//================
 	//	handletweets
 	//================
+
 	async function getUserDBinfo(user){
     const res = await fetch(`user/${user}.json`);
 		const resJSON = await res.json();
@@ -67,38 +66,22 @@
 		return resJSON
 	}
 
-	function waitX(t){ 
-    return new Promise((resolve,reject)=>{
-      setTimeout(resolve,t)
-    });
+	function cleanTweets(userTweets){
+		let tweets = userTweets.tweets
+		tweets = tweets.map(tweet=> {
+			// console.log(tweet.tweet)
+			return tweet.tweet.trim().replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').replace(/[^a-z0-9'’]/gmi, " ").replace(/\s+/g, " ").toLowerCase();
+		})
+		return tweets
 	}
 
-	const getUserTweets = async (user)=>{
-		let tweetsText = []
-		loadingText = 'Getting Tweets...'
-		await waitX(50)
-		// the broccoli 
-		// user.tweets.forEach(id=>{
-		// 	let matches =  $tweets.filter(x=>x._id.toString().indexOf(id.slice(1,14))>-1)
-		// 	if (matches.length > 1) {
-		// 		console.log ("similar tweet ID")
-		// 	} else if (matches.length === 0) {
-		// 		console.log('no match, ', id)
-		// 		return
-		// 	}
-		// 	tweetsText.push(matches[0].text)
-		// })
-		return tweetsText
-	}	
-	
-	const countWords = async (userTweets)=>{
+	const countWords = async (tweets)=>{
 		loadingText = 'Counting Words...'
 		let wordDict = {} 
-		let tweets = userTweets.tweets
 		await waitX(100)
-		tweets.forEach(tweetData=>{
-			let tweet = tweetData.tweet
+		tweets.forEach(tweet=>{
 			tweet.split(' ').forEach(word=>{
+				if (word === ' ' || word === '') return
 				if (word in wordDict){
 					wordDict[word]+=1;
 				} else {
@@ -106,7 +89,7 @@
 				}
 			})
 		})
-		return Object.entries(wordDict).sort((a,b)=>b[1]-a[1])
+		return wordDict
 	}
 
 	//================================================================
@@ -126,14 +109,62 @@
 	let badscale = true;
 	$: badscale = isNaN(scale(wordCount[0][1]));
 	export let scaleDims;
-	$: scale = scaleBars(scaleDims)
+
 	function scaleBars(scaleDims){
+		waiting = false;
 		return d3.scaleLinear()
 			.domain([scaleDims.domain.x,scaleDims.domain.y])
-      .range([scaleDims.range.y, scaleDims.range.x]);
+			.range([scaleDims.range.y, scaleDims.range.x]);
+			
 	}
 
 	$: plotWidth = getPlotWidth(waiting)
+
+	$: getUserData(user);
+	
+	$: scale = scaleBars(scaleDims)
+	
+	async function getUserData(user) {
+		try{
+			waiting = true;
+			let dbInfo = await getUserDBinfo(user);
+			let userId = dbInfo._id;
+			let userTweets = await getTweets(userId);
+			if (userTweets.tweets.length === 0) {
+				loadingText = 'No tweets to display. Please try another user.'
+				return 
+			}
+			let cleanedTweets = cleanTweets(userTweets);
+			let wordDict = await countWords(cleanedTweets);
+			countCount = createCountCount(Object.values(wordDict));
+			wordCount = Object.entries(wordDict).sort((a,b)=>b[1]-a[1]);
+			wordBlocks = createWordBlocks(wordCount, countCount)
+			console.log(wordBlocks)
+		} catch (err) {
+			console.log(err);
+			loadingText = 'Failed to fetch user data. Please try another user.'
+		}
+	}
+
+	function createCountCount(kvArr) {
+		let map = kvArr.reduce(function(obj, b) {
+			obj[b] = ++obj[b] || 1;
+			return obj;
+		}, {});
+		return map
+	}
+	
+	function createWordBlocks(wordCount,countCount) {
+		wordBlocks = {};
+		Object.keys(countCount).forEach(num=>{
+			if (countCount[num] > 10) wordBlocks[num] = [] 
+		})
+		wordCount.forEach(word=>{
+			if (word[1] in wordBlocks) wordBlocks[word[1]].push(word[0]);
+		})
+		return wordBlocks;
+	}
+
 
 </script>
 
@@ -146,14 +177,20 @@
 	<p></p>
 	{#each 	wordCount as word,index} 
 		{#if !waiting && !badscale && (word[1] > 1 || fullWordList)}
-			<Bar
-				value={scale(word[1])} 
-				{index} 
-				text={word[0]}
-				final={index === wordCount.length-1} 
-				{barWidth}
-				{barSpace}/>
+			{#if countCount[word[1]] < 10}
+				<Bar
+					unScaledValue={word[1]}
+					value={scale(word[1])} 
+					{index} 
+					text={word[0]}
+					final={index === wordCount.length-1} 
+					{barWidth}
+					{barSpace}/>
+			{/if}
 		{/if}
+	{/each}
+	{#each 	wordBlocks as count,index} 
+		<WordBlock {count}/>
 	{/each}
 </svg>
 

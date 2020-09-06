@@ -17,12 +17,14 @@
   let remOffset = 4;
 
   let showPlot=false;
-	onMount(async ()=>{
+	
+  onMount(async ()=>{
     handleResize();
     showPlot=true;
     await tick();
     handleScroll();
   })
+
   let scaleDims ={
     domain:{},
     range:{}
@@ -30,10 +32,16 @@
   const scaleYaxis = (data)=>{
     if (data.max === 0) { return }
     let ymax;
-		if (data.max > 5){
+
+		if (data.max < 5){
+      ymax = data.max;
+    } else if (data.max < 150) {
 			ymax = Math.round(data.max/10)*10;
-		} else {
-			ymax = data.max;
+    } else if (data.max < 5000) {
+      ymax = Math.round(data.max/100)*100;
+    } else {
+      ymax = Math.round(data.max/1000)*1000;
+
     }
     scaleDims.domain.x = 0;
     scaleDims.domain.y = ymax;

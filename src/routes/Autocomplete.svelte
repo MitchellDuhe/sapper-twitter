@@ -103,7 +103,7 @@
 
   .entry {
     transition: border-radius 0s;
-    padding: .2rem .75rem;
+    padding: .3rem .75rem;
     margin:-1px 0;
     display: flex;
     flex-direction: column;
@@ -123,7 +123,7 @@
   .entry * {
     transition: all 400ms ease-out 0ms, border-radius 0ms 0ms;
     margin:0;
-    font-size: .75rem;
+    font-size: 1rem;
   }
 
   .dropdown.centered .entry * {
@@ -137,7 +137,7 @@
    }
 
   .info{
-    font-size: .75rem;
+    font-size: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: start;
