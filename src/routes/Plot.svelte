@@ -3,7 +3,8 @@
   import { onMount,afterUpdate,tick } from 'svelte'
   import Barplot from './Barplot.svelte'
   import PlotControls from './PlotControls.svelte'
-	import { userTweetData } from './userTweetData.js'
+  import { userTweetData } from './userTweetData.js'
+  
   
   export let user;
   
@@ -67,7 +68,11 @@
 
   let windowWidth;
   const handleResize = ()=>{
-    plotHeight = window.innerHeight*0.80;
+    if (window.innerWidth < 1400){
+      plotHeight = Math.floor(window.innerHeight*0.75);
+    } else {
+      plotHeight = Math.floor(window.innerHeight*0.80);
+    }
     scaleYaxis($userTweetData);
   }
 
@@ -118,7 +123,10 @@
 {#if showPlot}
 <div class="container">
   <div class="header">
-    { displayedSearch } Weekly Word Usage
+    {#if $userTweetData.userPic !== undefined}
+      <a target='_blank' href={$userTweetData.userPic}><img class="profile-pic" src={$userTweetData.userPic} alt="profile_pic"></a>
+    {/if}
+    <span>{ displayedSearch } Weekly Word Usage</span>
   </div>
   <div class="plot-and-axis">
     <svg
@@ -210,6 +218,24 @@
 	.header {
 		margin:1rem auto;
 		font-size: 2rem;
+    display: inline-flex;
+	}
+
+  .header > span {
+    margin: 0;
+    padding: 0;
+  }
+
+  .profile-pic{
+    height: 2rem;
+    border-radius: 50%;
+    margin: 8px 8px 0 0;
+  }
+  
+	@media only screen and (max-width:1400px){
+		.plot-window{
+			width: 75vw;
+		}
 	}
 
 </style>

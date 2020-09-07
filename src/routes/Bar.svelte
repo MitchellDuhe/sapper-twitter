@@ -2,6 +2,7 @@
   import { tweened } from 'svelte/motion'
   import * as easings from 'svelte/easing';
   import { onMount } from 'svelte';
+
   
   let x,y;
   let SVGlength
@@ -37,7 +38,6 @@
   export let index = 0;
   export let barWidth = 20;
   export let barSpace = 20;
-  export let final = false;
   export let text = 'loading...';
   
   const height = tweened(0,{
@@ -65,8 +65,7 @@
     width={barWidth} 
     value={unScaledValue}
     height={Math.abs($height)} 
-    class="graph-bar" 
-    class:final>
+    class="graph-bar">
   </rect>
   <g
     style="transform:translateX({x+barWidth/2}px)"
@@ -75,12 +74,12 @@
       style={`transform:translate(${barCountOffsetX}px,${Math.abs($height)+barCountOffsetY}px) scaleY(-1);
               font-size:${barCountFontSize}px;
               fill:${barNumberColor}`}
-      class="graph-text">
+      class="graph-num">
       {unScaledValue}
     </text>
     <text 
       style={`transform:translate(${dx}px,${dy}px) rotate(45deg) scaleY(-1);`}
-      class="sub-bar"
+      class="word"
       bind:this={SVGlength}>
         {text}
     </text>
@@ -88,14 +87,10 @@
 </g>
 
 <style>  
-  .sub-bar{
+  .word{
     transform-origin: 30px 0px;
     fill: #333;
     font-size:1rem;
-  }
-
-  .final{
-    fill:red!important;
   }
   
   .bar-with-info{
@@ -110,13 +105,16 @@
 
   .graph-bar:hover {
     transition:100ms;
-    fill:blue;
+    fill:rgb(116, 36, 192);
     cursor: pointer;
   }
 
-  .graph-text{
+  .graph-bar:hover ~ g > .word {
     font-weight: bold;
+  }
 
+  .graph-num{
+    font-weight: bold;
   }
   
 </style>

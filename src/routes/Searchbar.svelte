@@ -112,7 +112,7 @@ class:centered
             type="text" 
             class="search" 
             id="autoComplete"
-            placeholder="Type Here"
+            placeholder="Enter Twitter User"
             on:autoComplete="{handleAutoComplete}"
             on:click="{()=>showDropdown=true}"
             on:keydown={handleKeydown}
@@ -220,6 +220,7 @@ class:centered
         border-radius: 25px;
         width:300px;
         padding-bottom:4%;
+        padding-left:20px;
     }
     .search-and-button.centered  .search-and-autocomplete{
         height:50px;

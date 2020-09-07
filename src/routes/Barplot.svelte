@@ -1,9 +1,9 @@
 <script>
 	import { onMount,createEventDispatcher,tick } from 'svelte'
 	const dispatch = createEventDispatcher();
-	import Bar from './Bar.svelte';
 	import Loading from './Loading.svelte'
-	import WordBlock from './WordBlock.svelte'
+	import Wordblock from './Wordblock.svelte'
+	import Bar from './Bar.svelte';
 	import { userTweetData } from './userTweetData.js'
 
 	//===============
@@ -21,7 +21,6 @@
       setTimeout(resolve,t)
     });
 	}
-
 	//================
 	//		plot dims
 	//================
@@ -33,16 +32,20 @@
 	let barSpace = 10;	
 	let plotWidth;
 	let fullWordList = true;
+	let barsWidth;
 
 	const getPlotWidth = (waiting)=>{
 		fullWordList = $userTweetData.length < 100
-		let width
+		let width;
 		if (!waiting){
+			let barsWidth;
 			if (fullWordList){
-				width = $userTweetData.length*( barWidth + barSpace ) + 20;
+				barsWidth = $userTweetData.length*( barWidth + barSpace ) + 20;
 			} else {
-				width = $userTweetData.gt1length*( barWidth + barSpace ) + 20;
+				barsWidth = $userTweetData.gt1length*( barWidth + barSpace ) + 20;
 			}
+			let blocksWidth = wordBlocks.length*350;
+			width = barsWidth + blocksWidth;
 			dispatch('plotWidthChange')
 		} else {
 			width = (windowWidth/2)-16 //adjusted for rem offset. Border box sizing messes up other padding
@@ -102,7 +105,8 @@
 		userTweetData.set({	
 			length:wordCount.length,
 			max:wordCount[0][1],
-			gt1length:wordCount.filter(x=>x[1]>1).length
+			gt1length:wordCount.filter(x=>x[1]>1).length,
+			userPic
 		})
 	}
 	let scale; 
@@ -118,17 +122,21 @@
 			
 	}
 
+	$: barsWidth = $userTweetData.length*( barWidth + barSpace ) + 20;
+
 	$: plotWidth = getPlotWidth(waiting)
 
 	$: getUserData(user);
 	
 	$: scale = scaleBars(scaleDims)
 	
+	let userPic
 	async function getUserData(user) {
 		try{
 			waiting = true;
 			let dbInfo = await getUserDBinfo(user);
 			let userId = dbInfo._id;
+			userPic = dbInfo.img_url
 			let userTweets = await getTweets(userId);
 			if (userTweets.tweets.length === 0) {
 				loadingText = 'No tweets to display. Please try another user.'
@@ -137,9 +145,20 @@
 			let cleanedTweets = cleanTweets(userTweets);
 			let wordDict = await countWords(cleanedTweets);
 			countCount = createCountCount(Object.values(wordDict));
-			wordCount = Object.entries(wordDict).sort((a,b)=>b[1]-a[1]);
-			wordBlocks = createWordBlocks(wordCount, countCount)
+			let wordCountFull = Object.entries(wordDict).sort((a,b)=>b[1]-a[1]);
+			wordBlocks=[];
+			if (wordCountFull.length < 100){
+				wordCount = wordCountFull;
+				console.log(wordCount)
+				return
+			} else if (wordCountFull.length === 0) {
+				loadingText = 'No tweets to display. Please try another user.'
+				return 
+			}
+			wordBlocks = createWordBlocks(wordCountFull, countCount)
+			
 			console.log(wordBlocks)
+			wordCount = wordCountFull.filter(word=>word[1]>parseInt(wordBlocks[0][0]))
 		} catch (err) {
 			console.log(err);
 			loadingText = 'Failed to fetch user data. Please try another user.'
@@ -156,42 +175,39 @@
 	
 	function createWordBlocks(wordCount,countCount) {
 		wordBlocks = {};
-		Object.keys(countCount).forEach(num=>{
-			if (countCount[num] > 10) wordBlocks[num] = [] 
-		})
+		let firstOverTen = Object.keys(countCount).reverse().find(num=>countCount[num] > 10)
+		for (let i=firstOverTen;i>0;i--){
+			wordBlocks[i] = []
+		}
 		wordCount.forEach(word=>{
 			if (word[1] in wordBlocks) wordBlocks[word[1]].push(word[0]);
 		})
-		return wordBlocks;
+		return Object.entries(wordBlocks).sort((a,b)=>b[0]-a[0]);
 	}
-
-
 </script>
 
 {#if waiting}
 	<Loading { loadingText } />
-{:else}
-	<p style="visibility:hidden;height:0;position:absolute"></p>
 {/if}
-<svg class="plot" width={plotWidth} height={plotHeight+32} bind:this={plot}>
+<svg class="plot" width={plotWidth} height={plotHeight+32} bind:this={plot}
+	xmlns="http://www.w3.org/2000/svg">
 	<p></p>
 	{#each 	wordCount as word,index} 
 		{#if !waiting && !badscale && (word[1] > 1 || fullWordList)}
-			{#if countCount[word[1]] < 10}
 				<Bar
 					unScaledValue={word[1]}
 					value={scale(word[1])} 
 					{index} 
 					text={word[0]}
-					final={index === wordCount.length-1} 
 					{barWidth}
 					{barSpace}/>
-			{/if}
 		{/if}
 	{/each}
-	{#each 	wordBlocks as count,index} 
-		<WordBlock {count}/>
-	{/each}
+	{#if !waiting}
+		{#each 	wordBlocks as count,index} 
+			<Wordblock initialOffset={barsWidth + 100} {count} {index}/>
+		{/each}
+	{/if}
 </svg>
 
 <style>

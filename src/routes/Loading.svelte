@@ -1,5 +1,6 @@
 <script>
-  import { fade } from 'svelte/transition'
+  // import { fade } from 'svelte/transition'
+  import { onMount } from 'svelte'
   export let loadingText;
   let fadeInOut = true
   
@@ -13,11 +14,11 @@
   {#if fadeInOut}
   <p 
     class="loading"
-    transition:fade> {loadingText} </p>
+    > {loadingText} </p>
   {:else}
     <p 
       class="loading"
-      transition:fade> {loadingText} </p>
+      > {loadingText} </p>
   {/if}
 
 <style>

@@ -24,7 +24,7 @@ const createAutocomplete = (src)=>{
         return !!query.replace(/ /g, "").length && query !== "hamburger";
       },
     },
-    placeHolder: "Type Here",
+    placeHolder: "Enter Twitter User",
     selector: "#autoComplete",
     debounce: 0,
     searchEngine: "loose",
