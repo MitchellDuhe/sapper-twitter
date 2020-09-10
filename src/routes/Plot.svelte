@@ -7,6 +7,7 @@
   
   
   export let user;
+  export let userInDB;
   
   let plotWindow;
   //==================
@@ -37,11 +38,11 @@
 		if (data.max < 5){
       ymax = data.max;
     } else if (data.max < 150) {
-			ymax = Math.round(data.max/10)*10;
+			ymax = Math.ceil(data.max/10)*10;
     } else if (data.max < 5000) {
-      ymax = Math.round(data.max/100)*100;
+      ymax = Math.ceil(data.max/100)*100;
     } else {
-      ymax = Math.round(data.max/1000)*1000;
+      ymax = Math.ceil(data.max/1000)*1000;
 
     }
     scaleDims.domain.x = 0;
@@ -141,7 +142,7 @@
       on:panmove={handlePanMove}
       on:panend={handlePanEnd}
       bind:this={plotWindow}>
-      <Barplot {plotHeight} {windowWidth} {user} {scaleDims}
+      <Barplot {plotHeight} {windowWidth} {user} {scaleDims} {userInDB}
         on:plotWidthChange={handleScroll}/>
     </div>
     <div 

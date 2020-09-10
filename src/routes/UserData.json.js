@@ -1,4 +1,4 @@
-import { init } from '@lib/mongo'
+import { getMongoClient } from '@lib/mongo'
 // const contents = JSON.stringify(posts.map(post => {
 // 	console.log('contents created')
 // 	return {
@@ -9,7 +9,7 @@ import { init } from '@lib/mongo'
 // }));
 // console.log(contents)
 export async function get(req, res) {
-	const { UserData } = await init();
+	const { UserData } = await getMongoClient();
 	const data = await UserData.find();
 	res.writeHead(200, {
 		'Content-Type': 'application/json'

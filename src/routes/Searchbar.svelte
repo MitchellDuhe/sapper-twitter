@@ -28,7 +28,8 @@
             if (selectedIndex < 0) selectedIndex = 0;
         } else if (event.keyCode === 40) {//down
             selectedIndex = selectedIndex + 1;
-            if (selectedIndex >= topResults.length-1) selectedIndex = topResults.length-1;
+            if (selectedIndex >= topResults.length) selectedIndex = topResults.length;
+            if (selectedIndex < 0) selectedIndex = 0;
         } else {
             selectedIndex = 0;
         }
@@ -44,12 +45,21 @@
 
     async function enterSearch(){
         showDropdown = false;
-        let selected = topResults[selectedIndex];
-        let displayedSearch = selected.value[selected.key];
-        search.value = displayedSearch;
+        let selected, displayedSearch,userInDB;
+        if (selectedIndex === topResults.length){
+            selected = {value:{handle:search.value}}
+            displayedSearch = search.value
+            userInDB = false;
+        } else {
+            selected = topResults[selectedIndex];
+            displayedSearch = selected.value[selected.key];
+            search.value = displayedSearch;
+            userInDB = true;
+        }
         dispatch('decenter',{
             handle: selected.value.handle,
-            displayedSearch
+            displayedSearch,
+            userInDB
         });
         await tick();
         search.blur();

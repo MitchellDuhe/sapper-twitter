@@ -37,8 +37,11 @@
     class:centered
     class:firstHover="{selectedIndex===0}">
     {#if topResults.length === 0}
-      <div class="entry lastChild">
-        <p>No Results</p>
+      <div 
+        on:mouseenter={()=>{handleHover(0)}}
+        on:click={()=>{handleClick(0)}}
+        class="entry lastChild selected">
+        <p class="no-results">No Results, Click here to search new handle</p>
       </div>
     {:else}
       {#each topResults as person,i}
@@ -46,7 +49,6 @@
           on:mouseenter={()=>{handleHover(i)}}
           on:click={()=>{handleClick(i)}}
           class="entry" 
-          class:lastChild="{i+1===topResults.length}"
           class:selected="{i===selectedIndex}">
           <div class="name">
             <p>{person.value.name}</p>
@@ -57,10 +59,17 @@
           </div>
         </div>
       {/each}
+      <div 
+        on:mouseenter={()=>{handleHover(topResults.length)}}
+        on:click={()=>{handleClick(topResults.length)}}
+        class:selected="{topResults.length===selectedIndex}"
+        class="entry lastChild">
+        <p class="no-results">Click here to search new handle</p>
+      </div>
     {/if}
   </div>
 {/if}
-  
+<!-- old entry last child => class:lastChild="{i+1===topResults.length}" -->
 <style>
   .dropdown.firstHover{
     transition: 200ms ease, border-radius 0ms 0ms;
@@ -131,7 +140,7 @@
     margin:1px;
   }
 
-  .name {
+  .name, .no-results {
     color:#333;
     font-weight: 500;
    }

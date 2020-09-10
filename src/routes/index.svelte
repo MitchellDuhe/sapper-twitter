@@ -26,12 +26,13 @@
 	})
 	let centered=true;
 	let user = {handle:'none-selected'};
-	let picture;
 	let displayedSearch;
+	let userInDB;
 	function decenter(event){
-		centered = false;
 		user = event.detail.handle;
 		displayedSearch = event.detail.displayedSearch;
+		userInDB = event.detail.userInDB;
+		centered = false;
 	}
 </script>
 <!-- <Loading2/> -->
@@ -44,7 +45,7 @@
 	</div>
 	{#if !centered }
 		<div class="graph-container">
-			<Plot {user} {picture} {displayedSearch}/>
+			<Plot {user} {displayedSearch} {userInDB}/>
 		</div>
 	{/if}
 </div>

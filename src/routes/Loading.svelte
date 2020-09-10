@@ -30,6 +30,8 @@
   margin: auto;
   color: #333;
   font-size: 2rem;
+  width: 80%;
+  padding-right: 2%;
   z-index: 1;
 }
 

@@ -15,6 +15,7 @@
 	let wordBlocks = [];
 	let waiting = true;
 	export let user;
+	export let userInDB;
 
 	function waitX(t){ 
     return new Promise((resolve,reject)=>{
@@ -58,14 +59,28 @@
 	//================
 
 	async function getUserDBinfo(user){
-    const res = await fetch(`user/${user}.json`);
-		const resJSON = await res.json();
+		let res,resJSON;
+		console.log('New User: ',userInDB)
+		if (userInDB){
+			res = await fetch(`user/${user}.json`);
+			resJSON = await res.json();
+		} else {
+			res = await fetch(`finduser/${user}.json`);
+			resJSON = await res.json();
+		}
 		return resJSON
 	}
 	
 	async function getTweets(userId){
-    const res = await fetch(`tweets/${userId}.json`);
-		const resJSON = await res.json();
+		let res,resJSON;
+		console.log('New Tweets: ',userInDB)
+		if (userInDB){
+      res = await fetch(`tweets/${userId}.json`);
+			resJSON = await res.json();
+		} else {
+			res = await fetch(`findtweets/${userId}.json`);
+			resJSON = await res.json();
+		}
 		return resJSON
 	}
 
@@ -78,10 +93,10 @@
 		return tweets
 	}
 
-	const countWords = async (tweets)=>{
+	async function countWords(tweets){
 		loadingText = 'Counting Words...'
 		let wordDict = {} 
-		await waitX(100)
+		await waitX(100) //remove this
 		tweets.forEach(tweet=>{
 			tweet.split(' ').forEach(word=>{
 				if (word === ' ' || word === '') return
@@ -132,16 +147,32 @@
 	
 	let userPic
 	async function getUserData(user) {
+		waiting = true;
 		try{
-			waiting = true;
 			let dbInfo = await getUserDBinfo(user);
+			if(dbInfo.tooManyRequests){
+				loadingText = 'This app has made too many requests to the Twitter API. Please try again later.'
+				return 
+			}
 			let userId = dbInfo._id;
-			userPic = dbInfo.img_url
+			userPic = dbInfo.img_url;
+			console.log(userId)
 			let userTweets = await getTweets(userId);
-			if (userTweets.tweets.length === 0) {
+			if(userTweets.tooManyRequests){
+				loadingText = 'This app has made too many requests to the Twitter API. Please try again later.'
+				return 
+			} else if (userTweets.noResults || userTweets.tweets.length === 0){
 				loadingText = 'No tweets to display. Please try another user.'
 				return 
 			}
+
+			handleTweets(userTweets);
+		} catch (err) {
+			console.log(err);
+			loadingText = 'Failed to fetch user data. Please try another user.'
+		}
+
+		async function handleTweets(userTweets){
 			let cleanedTweets = cleanTweets(userTweets);
 			let wordDict = await countWords(cleanedTweets);
 			countCount = createCountCount(Object.values(wordDict));
@@ -149,19 +180,13 @@
 			wordBlocks=[];
 			if (wordCountFull.length < 100){
 				wordCount = wordCountFull;
-				console.log(wordCount)
 				return
 			} else if (wordCountFull.length === 0) {
 				loadingText = 'No tweets to display. Please try another user.'
 				return 
 			}
 			wordBlocks = createWordBlocks(wordCountFull, countCount)
-			
-			console.log(wordBlocks)
 			wordCount = wordCountFull.filter(word=>word[1]>parseInt(wordBlocks[0][0]))
-		} catch (err) {
-			console.log(err);
-			loadingText = 'Failed to fetch user data. Please try another user.'
 		}
 	}
 
