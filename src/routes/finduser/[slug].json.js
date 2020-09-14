@@ -20,13 +20,23 @@ export async function get(req, res) {
     response = await axios(config)
   } catch(err) { 
     console.log(err)
-    return false
+    if (err.response.status === 429){
+      res.end(JSON.stringify({tooManyRequests:true}));
+    } else if (err.response.status === 404){
+      res.end(JSON.stringify({notFound:true}));
+    } 
+    res.end(JSON.stringify({failure:true}));
+    return 
   }
-
-  if (response.status === 429){ //too many requests 
-    res.end(JSON.stringify({tooManyRequests:true}));
-  } else if (response.status !== 200){
-    console.log(response)
+  //not sure if I ahould have any error handling here
+  // if (response.status === 429){ //too many requests 
+  //   res.end(JSON.stringify({tooManyRequests:true}));
+  // } else if (response.status === 404){
+  //   console.log('no user found')
+  //   res.end(JSON.stringify({notFound:true}));
+  // } else 
+  if (response.status !== 200){
+    console.log('got a non 200 reponse: ', response)
     res.end(JSON.stringify({failure:true}));
   }
   // console.log(response.data)

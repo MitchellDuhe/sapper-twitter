@@ -344,7 +344,9 @@
     _createClass(autoComplete, [{
       key: "search",
       value: function search(query, record) {
-        if (query.indexOf('+')>-1) { query = query.split('+').join('') }
+        //adjusting query 
+        if (query.indexOf('+')>-1)  query = query.split('+').join('')
+        if (query.indexOf('@')===0)  query = query.replace('@','')
         var recordLowerCase = record.toLowerCase();
         if (this.searchEngine === "loose") {
           query = query.replace(/ /g, "");

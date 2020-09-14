@@ -10,7 +10,7 @@
   let dy=0;
   export let unScaledValue = 0
   let valueLength = unScaledValue.toString().length
-  let barCountOffsetX,barCountFontSize,barCountOffsetY,barNumberColor;
+  let barCountOffsetX,barCountFontSize,barCountOffsetY,graphNumInner,graphNumAbove;
   if (valueLength === 1) {
     barCountOffsetX = -6;
     barCountFontSize = 22;
@@ -29,10 +29,10 @@
   // console.log(value)
   if (value/3 < barCountFontSize){
     barCountOffsetY = 10;
-    barNumberColor = 'blueviolet';
+    graphNumAbove = true;
   } else {
     barCountOffsetY = -24;
-    barNumberColor = 'beige';
+    graphNumInner = true;
   }
 
   export let index = 0;
@@ -72,9 +72,10 @@
     y=-5> 
     <text 
       style={`transform:translate(${barCountOffsetX}px,${Math.abs($height)+barCountOffsetY}px) scaleY(-1);
-              font-size:${barCountFontSize}px;
-              fill:${barNumberColor}`}
-      class="graph-num">
+              font-size:${barCountFontSize}px;`}
+      class="graph-num"
+      class:graphNumInner
+      class:graphNumAbove>
       {unScaledValue}
     </text>
     <text 
@@ -99,13 +100,13 @@
 
   .graph-bar{
     margin:.5rem;
-    fill: blueviolet;
+    fill:var(--plot-colorful);
     margin-bottom: 0;
   }
-
+  
   .graph-bar:hover {
-    transition:100ms;
-    fill:rgb(116, 36, 192);
+    transition:500ms;
+    fill:url(#grad3);
     cursor: pointer;
   }
 
@@ -115,6 +116,12 @@
 
   .graph-num{
     font-weight: bold;
+  }
+  .graphNumInner{
+    fill:var(--plot-background);
+  }
+  .graphNumAbove{
+    fill:var(--plot-colorful);
   }
   
 </style>

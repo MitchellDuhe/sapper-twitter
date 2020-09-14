@@ -141,11 +141,12 @@
   }
 
   .name, .no-results {
-    color:#333;
+    color: var(--darkest-color);
     font-weight: 500;
    }
 
   .info{
+    color: var(--darker-color);
     font-size: 1rem;
     display: flex;
     flex-direction: column;

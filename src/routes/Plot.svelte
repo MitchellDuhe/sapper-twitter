@@ -2,12 +2,14 @@
   import { pannable } from './pannable.js'
   import { onMount,afterUpdate,tick } from 'svelte'
   import Barplot from './Barplot.svelte'
-  import PlotControls from './PlotControls.svelte'
+  // import PlotControls from './PlotControls.svelte'
   import { userTweetData } from './userTweetData.js'
+  import { fade } from 'svelte/transition'
   
   
   export let user;
   export let userInDB;
+  export let autoCompleteObject;
   
   let plotWindow;
   //==================
@@ -32,11 +34,13 @@
     range:{}
   };
   const scaleYaxis = (data)=>{
-    if (data.max === 0) { return }
+    if (data === undefined || data.max === 0) { return }
     let ymax;
 
-		if (data.max < 5){
+		if (data.max < 10){
       ymax = data.max;
+    } else if (data.max < 50) {
+			ymax = Math.ceil(data.max/5)*5;
     } else if (data.max < 150) {
 			ymax = Math.ceil(data.max/10)*10;
     } else if (data.max < 5000) {
@@ -127,7 +131,7 @@
     {#if $userTweetData.userPic !== undefined}
       <a target='_blank' href={$userTweetData.userPic}><img class="profile-pic" src={$userTweetData.userPic} alt="profile_pic"></a>
     {/if}
-    <span>{ displayedSearch } Weekly Word Usage</span>
+    <span>{ displayedSearch } Weekly Word Usage. ({$userTweetData.nTweets} Tweets)</span>
   </div>
   <div class="plot-and-axis">
     <svg
@@ -136,13 +140,16 @@
       bind:this={yAxis}>
       <g class="left-axis"></g>
     </svg>
+    <!-- <div class="scrollbar-container">
+      <div class="scrollbar"></div>
+    </div> -->
     <div class="plot-window"
       use:pannable
       on:scroll={handleScroll}
       on:panmove={handlePanMove}
       on:panend={handlePanEnd}
       bind:this={plotWindow}>
-      <Barplot {plotHeight} {windowWidth} {user} {scaleDims} {userInDB}
+      <Barplot {plotHeight} {windowWidth} {user} {scaleDims} {userInDB} {autoCompleteObject}
         on:plotWidthChange={handleScroll}/>
     </div>
     <div 
@@ -186,7 +193,7 @@
     padding-bottom: calc(2rem - 5px);
     padding-top:calc(1rem + 5px); ;
     margin-bottom: 0;
-    background-color: beige;
+    background-color: var(--plot-background);
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
   }
@@ -201,6 +208,19 @@
     flex-direction: column;
   }
 
+	/* .scrollbar-container{
+		height:var(--plot-padding-top);
+		margin-top:var(--plot-padding-top);
+		width:100%;
+		background-color:var(--plot-background);
+	}
+
+	.scrollbar{
+		width:10%;
+		height:100%;
+		border-radius:calc(var(--plot-padding-top)/2);
+		background-color: var(--darker-color);
+	} */
 
   .plot-window{
     display: flex;
@@ -236,7 +256,20 @@
 	@media only screen and (max-width:1400px){
 		.plot-window{
 			width: 75vw;
-		}
+    }
+    
+	}
+  
+  @media only screen and (max-width:1000px){
+    .header{
+      font-size: 1.75rem;
+    }
+  }
+  
+  @media only screen and (max-width:700px){
+    .header{
+      font-size: 1.5rem;
+    }
 	}
 
 </style>

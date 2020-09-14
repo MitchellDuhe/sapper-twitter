@@ -1,4 +1,8 @@
 const createAutocomplete = (src)=>{
+  if (typeof(autoComplete) !== "function") {
+    console.log('Autocomplete js not loaded yet')
+    return false;
+  }
   const autoCompletejs = new autoComplete({
     data: {
       src,
@@ -61,6 +65,7 @@ const createAutocomplete = (src)=>{
       console.log(feedback);
     },
   });
+  return autoCompletejs
 }
 
 export default createAutocomplete;

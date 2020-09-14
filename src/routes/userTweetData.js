@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
 
-const data = []
+const data = {};
 
 export const userTweetData = writable(data)

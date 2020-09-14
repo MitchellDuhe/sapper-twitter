@@ -3,7 +3,8 @@
     const dispatch = createEventDispatcher();
     import SearchIcon from './SearchIcon.svelte'
     import Autocomplete from './Autocomplete.svelte'
-
+    import handleCookie from'./cookieUtils.js'
+    export let searchError;
     export let centered = true;
     let button, search;
     let strokeWidth = 4;
@@ -18,6 +19,7 @@
     let showDropdown = false;
     let selectedIndex = 0;
     function handleKeydown(event){
+        dispatch('clearError');
         showDropdown = true;
         if (event.keyCode === 13 && returnEnd){
             returnEnd = false;
@@ -42,6 +44,27 @@
             button.click();
         }
     }
+    let user_id, newUser;
+    async function setSearcherInfo(searchValue){
+        [user_id, newUser] = await handleCookie('_id');
+        const data = {
+            user_id,
+            newUser,
+            searchValue
+        }
+        try{
+            let response = await fetch('/saveSearcher', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            let result = await response.json()
+        } catch(err) {
+            console.log('POST error', err.message)
+        }
+    }
 
     async function enterSearch(){
         showDropdown = false;
@@ -56,6 +79,7 @@
             search.value = displayedSearch;
             userInDB = true;
         }
+        let searcherInfo = await setSearcherInfo(selected.value.handle)
         dispatch('decenter',{
             handle: selected.value.handle,
             displayedSearch,
@@ -107,6 +131,11 @@
         enterSearch();
     }
 
+    const handleFocus = ()=>{
+        showDropdown=true
+        dispatch('clearError');
+    }
+
 </script>
 
 <svelte:body 
@@ -118,17 +147,23 @@
 class:centered
     class="search-and-button">
     <div class="search-and-autocomplete">
+        {#if searchError}
+            <div class="search-error">
+                {searchError}
+            </div>
+        {/if}
         <input 
             type="text" 
             class="search" 
             id="autoComplete"
             placeholder="Enter Twitter User"
-            on:autoComplete="{handleAutoComplete}"
-            on:click="{()=>showDropdown=true}"
+            on:autoComplete={handleAutoComplete}
+            on:focus={handleFocus}
             on:keydown={handleKeydown}
             on:keyup={handleKeyup}
             bind:this={search}
-            bind:value={searchText}>
+            bind:value={searchText}
+            maxlength="51">
             
         <Autocomplete {searchText} {centered} {showDropdown} {topResults} {selectedIndex} 
             on:entryHover={handleEntryHover}
@@ -162,6 +197,7 @@ class:centered
         display: flex;
         flex-direction: column;
         width:225px;
+        position:relative
         /* transition: all 4000ms ease-out 0ms; */
     }
     .search{
@@ -243,4 +279,19 @@ class:centered
         box-shadow: 0 0 6px var(--lighter-color);
     }
 
+    .search-and-button.centered .search-error {
+        font-size:1.25rem;
+        top:-3rem;
+        padding:1rem;
+    }
+    
+    .search-error { 
+        font-size: 1rem;
+        color: lightcoral;
+        position: absolute;
+        height: 1rem;
+        top: -2rem;
+        padding: 0.5rem;
+        white-space: nowrap;
+    }
 </style>

@@ -16,6 +16,7 @@
 	let waiting = true;
 	export let user;
 	export let userInDB;
+	export let autoCompleteObject;
 
 	function waitX(t){ 
     return new Promise((resolve,reject)=>{
@@ -60,11 +61,11 @@
 
 	async function getUserDBinfo(user){
 		let res,resJSON;
-		console.log('New User: ',userInDB)
 		if (userInDB){
 			res = await fetch(`user/${user}.json`);
 			resJSON = await res.json();
 		} else {
+			loadingText = 'Finding new user'
 			res = await fetch(`finduser/${user}.json`);
 			resJSON = await res.json();
 		}
@@ -73,11 +74,11 @@
 	
 	async function getTweets(userId){
 		let res,resJSON;
-		console.log('New Tweets: ',userInDB)
 		if (userInDB){
-      res = await fetch(`tweets/${userId}.json`);
+			res = await fetch(`tweets/${userId}.json`);
 			resJSON = await res.json();
 		} else {
+			loadingText = "Finding new user's tweets, this could take a minute depending on the number of recent tweets"
 			res = await fetch(`findtweets/${userId}.json`);
 			resJSON = await res.json();
 		}
@@ -87,7 +88,6 @@
 	function cleanTweets(userTweets){
 		let tweets = userTweets.tweets
 		tweets = tweets.map(tweet=> {
-			// console.log(tweet.tweet)
 			return tweet.tweet.trim().replace(/(?:https?|ftp):\/\/[\n\S]+/g, '').replace(/[^a-z0-9'’]/gmi, " ").replace(/\s+/g, " ").toLowerCase();
 		})
 		return tweets
@@ -118,6 +118,7 @@
 	$: editUserTweetData(wordCount)
 	function editUserTweetData(wordCount){
 		userTweetData.set({	
+			nTweets,
 			length:wordCount.length,
 			max:wordCount[0][1],
 			gt1length:wordCount.filter(x=>x[1]>1).length,
@@ -145,27 +146,39 @@
 	
 	$: scale = scaleBars(scaleDims)
 	
-	let userPic
+	let userPic;
+	let nTweets = 'Counting';
 	async function getUserData(user) {
 		waiting = true;
 		try{
 			let dbInfo = await getUserDBinfo(user);
+			if (!userInDB) addNewSearchToTempMemory(dbInfo);
 			if(dbInfo.tooManyRequests){
 				loadingText = 'This app has made too many requests to the Twitter API. Please try again later.'
+				return 
+			} else if (dbInfo.notFound){
+				loadingText = 'No user found. Be sure to search by the twitter handle '
 				return 
 			}
 			let userId = dbInfo._id;
 			userPic = dbInfo.img_url;
-			console.log(userId)
+			userTweetData.update(data=>{
+				data.userPic = userPic;
+				return data
+			})
 			let userTweets = await getTweets(userId);
 			if(userTweets.tooManyRequests){
 				loadingText = 'This app has made too many requests to the Twitter API. Please try again later.'
 				return 
 			} else if (userTweets.noResults || userTweets.tweets.length === 0){
 				loadingText = 'No tweets to display. Please try another user.'
+				userTweetData.update(data=>{
+					data.nTweets = 0;
+					return data
+				})
 				return 
 			}
-
+			nTweets = userTweets.tweets.length;
 			handleTweets(userTweets);
 		} catch (err) {
 			console.log(err);
@@ -187,6 +200,15 @@
 			}
 			wordBlocks = createWordBlocks(wordCountFull, countCount)
 			wordCount = wordCountFull.filter(word=>word[1]>parseInt(wordBlocks[0][0]))
+		}
+		function addNewSearchToTempMemory(dbInfo){
+				autoCompleteObject.dataStream.push({
+				name:dbInfo.name,
+				followers: dbInfo.followers,
+				handle: dbInfo.handle,
+				img_url: dbInfo.img_url,
+				_id: dbInfo._id,
+			})
 		}
 	}
 
@@ -216,7 +238,13 @@
 {/if}
 <svg class="plot" width={plotWidth} height={plotHeight+32} bind:this={plot}
 	xmlns="http://www.w3.org/2000/svg">
-	<p></p>
+	<!-- <p></p> -->
+  <defs>
+		<linearGradient id="grad3" gradientTransform="rotate(90)">
+			<stop offset="0%"/>
+      <stop offset="50%"/>
+    </linearGradient>
+  </defs>
 	{#each 	wordCount as word,index} 
 		{#if !waiting && !badscale && (word[1] > 1 || fullWordList)}
 				<Bar
@@ -236,23 +264,20 @@
 </svg>
 
 <style>
-	svg {
-		color:black;
-		fill: black;
-		border-top-right-radius: 25px;
-		border-bottom-right-radius: 25px;
-		min-width: 95%;
-	}
-
 	.plot, .plot * {
 		user-select: none;
 	}
 
 	.plot{
+		color:black;
+		fill: black;
+		border-top-right-radius: 25px;
+		border-bottom-right-radius: 25px;
+		min-width: 95%;
 		transform: rotate(180deg) scaleX(-1);
 		color:#333;
-		background-color: beige;
-		padding:0 1rem 2rem 0;
+		background-color: var(--plot-background);
+		padding:0 var(--plot-padding-top) 2rem 0;
 		cursor: grab;
 	}
 
@@ -260,4 +285,11 @@
 		cursor: grabbing;
 	}
 
+	#grad3 > stop:nth-child(1){
+		stop-color:var(--plot-colorful-secondary);
+	}
+	#grad3 > stop:nth-child(2){
+		stop-color:var(--plot-colorful);
+	}
+	
 </style>
