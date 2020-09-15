@@ -81,9 +81,10 @@
     flex-direction: column;
     margin-top: -1.3rem;
     padding-top: 1rem;
-    height:1.3rem;
+    height:100%;
     width:100%;
     box-sizing:border-box;
+    overflow:visible;
   }
 
   .dropdown.centered .entry.lastChild {
@@ -105,13 +106,12 @@
   .dropdown.centered{
     margin-top: -2.2rem;
     padding-top: 1.5rem;
-    height:3.9rem;
     border-bottom-left-radius:25px;
     border-bottom-right-radius:25px ;
   }
 
   .entry {
-    height:auto;
+    height:max-content;
     transition: border-radius 0s;
     padding: .3rem .75rem;
     margin:-1px 0;

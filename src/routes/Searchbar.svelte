@@ -143,8 +143,7 @@
 />
 
 <div 
-
-class:centered
+    class:centered
     class="search-and-button">
     <div class="search-and-autocomplete">
         {#if searchError}
@@ -257,7 +256,7 @@ class:centered
     .search-and-button.centered  .search-button{
         width:50px;
         height:50px;
-        margin: 0 1rem;
+        margin-left: 0.5rem;
     }
 
     .search-and-button.centered  .search{
