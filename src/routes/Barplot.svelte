@@ -2,7 +2,7 @@
 	import { onMount,createEventDispatcher,tick } from 'svelte'
 	const dispatch = createEventDispatcher();
 	import Loading from './Loading.svelte'
-	// import Wordblock from './Wordblock.svelte'
+	import Wordblock from './Wordblock.svelte'
 	import Bar from './Bar.svelte';
 	import { userTweetData } from './userTweetData.js'
 
