@@ -1,5 +1,4 @@
 <script>
-
   export let count;
   export let index;
   export let initialOffset;
