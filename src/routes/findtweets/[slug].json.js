@@ -1,4 +1,4 @@
-import { getMongoClient } from '@lib/mongo'
+import { getMongoClient } from '../../mongo'
 
 const axios = require('axios');
 const BEARER_TOKEN = 'Bearer AAAAAAAAAAAAAAAAAAAAAPloGwEAAAAAmjo1mciODFBho6q9dz7VDnSh3%2FA%3DkHLhuPCubtWRydD18D1EpLOtpHcAenzukz3OSZGJIhGFhR3zOZ'

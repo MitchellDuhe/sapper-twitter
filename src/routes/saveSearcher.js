@@ -1,5 +1,5 @@
 
-import { getMongoClient } from '@lib/mongo'
+import { getMongoClient } from '../mongo'
 
 export async function post(req, res, next) {
   /* Initializes */

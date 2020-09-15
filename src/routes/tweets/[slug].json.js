@@ -1,4 +1,4 @@
-import { getMongoClient } from '@lib/mongo'
+import { getMongoClient } from '../../mongo'
 
 // const contents = JSON.stringify(posts.map(post => {
 // 	console.log('contents created')
