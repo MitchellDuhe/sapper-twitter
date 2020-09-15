@@ -15,7 +15,6 @@
 	export let users;
 	import { onMount } from 'svelte'
 	import Searchbar from './Searchbar.svelte'
-	import Graph from './Graph.svelte'
 	import Plot from './Plot.svelte'
   import { userTweetData } from './userTweetData.js'
 
