@@ -161,7 +161,7 @@
 				return 
 			}
 			let userId = dbInfo._id;
-			userPic = dbInfo.img_url;
+			userPic = dbInfo.img_url.replace('http://','https://');
 			userTweetData.update(data=>{
 				data.userPic = userPic;
 				return data
