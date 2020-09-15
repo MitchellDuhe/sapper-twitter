@@ -41,7 +41,7 @@
 			if (!autoCompleteObject && retries < 5){
 				retryAutocomplete(retries+1)
 			}
-		},50)
+		},50*retries)
 	}
 
 

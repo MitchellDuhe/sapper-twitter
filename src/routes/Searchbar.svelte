@@ -101,8 +101,8 @@
 
     let topResults = [];
     const handleAutoComplete = e => {
-        topResults = e.detail.results;
-        topResults = filterTopResults(topResults)
+        topResults = filterTopResults(e.detail.results)
+        console.log(topResults)
     }
     
     const filterTopResults =(results)=>{
