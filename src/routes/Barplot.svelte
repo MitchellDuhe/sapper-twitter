@@ -259,7 +259,7 @@
 	{/each}
 	{#if !waiting}
 		{#each 	wordBlocks as count,index} 
-			<!-- <Wordblock initialOffset={barsWidth + 100} {count} {index}/> -->
+			<Testblock initialOffset={barsWidth + 100} {count} {index}/>
 		{/each}
 	{/if}
 </svg>
