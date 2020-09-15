@@ -33,6 +33,8 @@
     overflow-y: scroll;
     scrollbar-width: thin;
     scrollbar-color: var(--dark-color) var(--lighter-color);
+    background-color:var(--plot-colorful);
+    background: linear-gradient(var(--plot-colorful) 50%, var(--plot-colorful-secondary) 100%);
   }
   .words{
     padding-bottom:1rem;

@@ -23,13 +23,10 @@
 	let autoCompleteObject;
 	onMount(()=>{
 		if (!(users === undefined)){
-			let retries = 0 
-			while (!autoCompleteObject && retries < 5){
-				autoCompleteObject = createAutoComplete(users)
-				retries++
-			}
+			retryAutocomplete(0);
 		}
 	})
+	
 	let centered=true;
 	let user = {handle:'none-selected'};
 	let displayedSearch;
@@ -37,6 +34,17 @@
 	let handleRegex = /[^a-zA-Z0-9\_]/g;
 	let searchValue;
 	let searchError = false;
+
+	function retryAutocomplete(retries){
+		setTimeout(()=>{
+			autoCompleteObject = createAutoComplete(users)
+			if (!autoCompleteObject && retries < 5){
+				retryAutocomplete(retries+1)
+			}
+		},50)
+	}
+
+
 	function decenter(event){
 		searchValue = event.detail.handle.replace('@','')
 		if (searchValue.length > 16 || handleRegex.test(searchValue)){

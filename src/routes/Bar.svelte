@@ -51,7 +51,7 @@
   $: height.set(value);
   
   onMount(()=>{
-    let length = SVGlength.textLength.baseVal.value;
+    let length = SVGlength.getBBox().width
     dy = -length/1.5;
     dx = -length/1.5;
   })

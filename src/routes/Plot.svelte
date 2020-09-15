@@ -228,6 +228,7 @@
     width: 50vw;
     overflow-x: scroll;
     justify-content: center;
+    scrollbar-width: none;
 		/* border-top-right-radius: 25px; */
     /* border-bottom-right-radius: 25px; */
   }
