@@ -81,7 +81,6 @@
     flex-direction: column;
     margin-top: -1.3rem;
     padding-top: 1rem;
-    height:100%;
     width:100%;
     box-sizing:border-box;
     overflow:visible;
@@ -111,7 +110,6 @@
   }
 
   .entry {
-    height:max-content;
     transition: border-radius 0s;
     padding: .3rem .75rem;
     margin:-1px 0;
