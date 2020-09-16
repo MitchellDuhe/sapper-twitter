@@ -110,10 +110,11 @@
   }
 
   .entry {
+
     transition: border-radius 0s;
     padding: .3rem .75rem;
     margin:-1px 0;
-    display: flex;
+    display: block;
     flex-direction: column;
     background-color:  var(--lighter-color);
   }
