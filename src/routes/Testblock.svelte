@@ -67,6 +67,7 @@
   .word-groups {
     /* width:250px;
     height:90%; */
+    position:relative;
     background-color:var(--plot-colorful);
     background: linear-gradient(var(--plot-colorful) 50%, var(--plot-colorful-secondary) 100%);
     transform: scaleY(-1);
