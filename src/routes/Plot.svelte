@@ -10,7 +10,8 @@
   export let user;
   export let userInDB;
   export let autoCompleteObject;
-  
+  const mobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobi/i.test(navigator.userAgent)
+
   let plotWindow;
   //==================
   //      axis
@@ -152,13 +153,26 @@
       <Barplot {plotHeight} {windowWidth} {user} {scaleDims} {userInDB} {autoCompleteObject}
         on:plotWidthChange={handleScroll}/>
     </div>
-    <div 
-      class="plot-shadow"
-      use:pannable
-      on:panmove={handlePanMove}
-      on:panend={handlePanEnd}
-      style={`right:${-50+distanceToEnd}px`}>
-    </div>
+    {#if mobileDevice}
+      <div class="plot-arrow"
+        use:pannable
+        on:panmove={handlePanMove}
+        on:panend={handlePanEnd}
+        style={`right:${-50+distanceToEnd}px`}>
+        <svg xmlns="http://www.w3.org/2000/svg" class="arrow" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path stroke="none" d="M0 0h24v24H0z"/>
+          <polyline points="9 6 15 12 9 18" />
+        </svg>
+      </div>
+    {:else}
+      <div 
+        class="plot-shadow"
+        use:pannable
+        on:panmove={handlePanMove}
+        on:panend={handlePanEnd}
+        style={`right:${-50+distanceToEnd}px`}>
+      </div>
+    {/if}
   </div>
   <!-- <PlotControls on:newNumber={scaleYaxis}/> -->
 </div>
@@ -174,6 +188,24 @@
     position: absolute;
     transition: 100ms ease-in-out;
     cursor: grab;
+    display: flex;
+  }
+
+  .arrow{
+    width:100%;
+    height:auto;
+    align-self: center;
+    color:var(--darker-color)
+  }
+
+  .plot-arrow{
+    display: flex;
+    height:100%;
+    width: 50px;
+    position: absolute;
+    transition: 100ms ease-in-out;
+    cursor: grab;
+    font-size:100px;
   }
 
   .plot-shadow:active{

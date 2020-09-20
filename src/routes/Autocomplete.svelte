@@ -83,7 +83,9 @@
     padding-top: 1rem;
     width:100%;
     box-sizing:border-box;
-    overflow:visible;
+    overflow:visible;   
+    border-bottom-left-radius: 12.5px;
+    border-bottom-right-radius: 12.5px;
   }
 
   .dropdown.centered .entry.lastChild {

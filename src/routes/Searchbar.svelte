@@ -102,7 +102,7 @@
     let topResults = [];
     const handleAutoComplete = e => {
         topResults = filterTopResults(e.detail.results)
-        console.log(topResults)
+
     }
     
     const filterTopResults =(results)=>{

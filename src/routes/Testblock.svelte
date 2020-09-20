@@ -7,9 +7,10 @@
 </script>
 
 
-  <foreignObject class="word-groups"
+  <foreignObject class="word-groups" width="250px" height="90%"
     {x}
-    {y}>
+    {y}
+  >
     <div class="word-groups-inner-container">
       <div class='text-holder'>
         <div 
@@ -35,6 +36,7 @@
     scrollbar-color: var(--dark-color) var(--lighter-color);
     background-color:var(--plot-colorful);
     background: linear-gradient(var(--plot-colorful) 50%, var(--plot-colorful-secondary) 100%);
+    display: block;
   }
   .words{
     padding-bottom:1rem;
@@ -63,8 +65,8 @@
   }
 
   .word-groups {
-    width:250px;
-    height:90%;
+    /* width:250px;
+    height:90%; */
     background-color:var(--plot-colorful);
     background: linear-gradient(var(--plot-colorful) 50%, var(--plot-colorful-secondary) 100%);
     transform: scaleY(-1);
