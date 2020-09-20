@@ -23,7 +23,7 @@ export default {
 		plugins: [
 			replace({
 				'process.browser': true,
-				'process.env.NODE_ENV': JSON.stringify(mode)
+				'process.env.NODE_ENV': JSON.stringify(mode),
 			}),
 			svelte({
 				dev,
@@ -68,7 +68,10 @@ export default {
 		plugins: [
 			replace({
 				'process.browser': false,
-				'process.env.NODE_ENV': JSON.stringify(mode)
+				'process.env.NODE_ENV': JSON.stringify(mode),
+				'process.env.MONGO_URI': JSON.stringify('mongodb+srv://general_db_access:JELd0ht3cdzBquAw@twitter-data.l7eme.mongodb.net/twitter?retryWrites=true&w=majority'),
+				'process.env.TWITTER_BEARER_TOKEN': JSON.stringify('Bearer AAAAAAAAAAAAAAAAAAAAAPloGwEAAAAAmjo1mciODFBho6q9dz7VDnSh3%2FA%3DkHLhuPCubtWRydD18D1EpLOtpHcAenzukz3OSZGJIhGFhR3zOZ'),
+				'process.env.TWITTER_COOKIE': JSON.stringify('personalization_id="v1_3b5iLAFw15VD+UD7P1XlZA=="; guest_id=v1%3A159810645520529642'),
 			}),
 			svelte({
 				generate: 'ssr',

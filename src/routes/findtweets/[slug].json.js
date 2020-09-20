@@ -1,12 +1,10 @@
 import { getMongoClient } from '../../mongo'
 
 const axios = require('axios');
-const BEARER_TOKEN = 'Bearer AAAAAAAAAAAAAAAAAAAAAPloGwEAAAAAmjo1mciODFBho6q9dz7VDnSh3%2FA%3DkHLhuPCubtWRydD18D1EpLOtpHcAenzukz3OSZGJIhGFhR3zOZ'
-const COOKIE = 'personalization_id="v1_3b5iLAFw15VD+UD7P1XlZA=="; guest_id=v1%3A159810645520529642'
 
 const headers = {
-  'Authorization': BEARER_TOKEN, 
-  'Cookie': COOKIE
+  'Authorization': process.env.TWITTER_BEARER_TOKEN, 
+  'Cookie': process.env.TWITTER_COOKIE
 }
 
 export async function get(req,res){

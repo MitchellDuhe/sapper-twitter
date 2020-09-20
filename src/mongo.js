@@ -1,8 +1,7 @@
 const mongoose = require('mongoose')
 mongoose.set('useFindAndModify', false);
 
-// let mongoURI = 'mongodb://localhost:27017/twitter'
-let mongoURI = 'mongodb+srv://general_db_access:JELd0ht3cdzBquAw@twitter-data.l7eme.mongodb.net/twitter?retryWrites=true&w=majority'
+let MONGO_URI = process.env.MONGO_URI;
 
 mongoose.connection.on("open", function(ref) {
   console.log("mongo server connected");
@@ -53,7 +52,7 @@ const Searchers = mongoose.model('Searchers', searcherSchema, 'searchers');
 let client = null;
 export async function getMongoClient(){
   if (!client){    
-    client = await mongoose.connect(mongoURI,{
+    client = await mongoose.connect(MONGO_URI,{
       useNewUrlParser:true,
       useUnifiedTopology:true
     })
