@@ -2,9 +2,7 @@
   import { pannable } from './pannable.js'
   import { onMount,afterUpdate,tick } from 'svelte'
   import Barplot from './Barplot.svelte'
-  // import PlotControls from './PlotControls.svelte'
   import { userTweetData } from './userTweetData.js'
-  import { fade } from 'svelte/transition'
   
   
   export let user;

@@ -47,7 +47,11 @@
     text-align:justify;
     margin:0;
     overflow-wrap: normal;
-    z-index:1;
+    z-index:1;position: absolute;
+    top: 0;
+    left: 0;
+    width: 80%;
+    margin-left: 10%;
   }
   
   .word-groups-inner-container::-webkit-scrollbar {
