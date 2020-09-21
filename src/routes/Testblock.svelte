@@ -26,9 +26,9 @@
 
 <style>
   .word-groups-inner-container{
-    position: absolute;
+    /* position: absolute;
     top: 0;
-    left: 0;
+    left: 0; */
     width:100%;
     height:100%;
     overflow-y: scroll;
@@ -47,11 +47,12 @@
     text-align:justify;
     margin:0;
     overflow-wrap: normal;
-    z-index:1;position: absolute;
+    z-index:1;
+    /* position: absolute;
     top: 0;
     left: 0;
     width: 80%;
-    margin-left: 10%;
+    margin-left: 10%; */
   }
   
   .word-groups-inner-container::-webkit-scrollbar {
