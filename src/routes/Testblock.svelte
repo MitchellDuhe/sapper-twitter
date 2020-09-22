@@ -2,17 +2,24 @@
   export let count;
   export let index;
   export let initialOffset;
+  export let mobileDevice;
   let x = initialOffset + index*(250+100); //make x the offset of all the used bars so far + the groupwidths
   let y = '-100%';
+  let height = mobileDevice ? '80%' : '90%'
+
+
 </script>
 
 
-  <foreignObject class="word-groups" width="250px" height="90%"
+  <foreignObject xlmns="http://www.w3.org/1999/xhtml" class="word-groups" width="250px" {height}
     {x}
     {y}
   >
     <body xlmns="http://www.w3.org/1999/xhtml">
-      <div class="word-groups-inner-container">
+      <div 
+        class="word-groups-inner-container"
+        class:mobileDevice
+      >
         <div class='text-holder'>
           <div 
             class='num-header'
@@ -28,6 +35,7 @@
 
 <style>
   .word-groups-inner-container{
+
     position: fixed;
     top: 0;
     left: 0;
@@ -40,6 +48,11 @@
     background: linear-gradient(var(--plot-colorful) 50%, var(--plot-colorful-secondary) 100%);
     display: block;
   }
+
+  .word-groups-inner-container.mobileDevice{
+    transform:scaleY(-1);
+  }
+
   .words{
     padding-bottom:1rem;
     line-height:2.5rem;
@@ -99,5 +112,6 @@
     margin-left:-30px;
     margin-top:30px;
   }
+
 
 </style>

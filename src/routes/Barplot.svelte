@@ -18,6 +18,7 @@
 	export let user;
 	export let userInDB;
 	export let autoCompleteObject;
+	export let mobileDevice;
 
 	function waitX(t){ 
     return new Promise((resolve,reject)=>{
@@ -254,12 +255,14 @@
 					{index} 
 					text={word[0]}
 					{barWidth}
-					{barSpace}/>
+					{barSpace}
+					{mobileDevice}
+				/>
 		{/if}
 	{/each}
 	{#if !waiting}
 		{#each 	wordBlocks as count,index} 
-			<Testblock initialOffset={barsWidth + 100} {count} {index}/>
+			<Testblock initialOffset={barsWidth + 100} {count} {index} {mobileDevice}/>
 		{/each}
 	{/if}
 </svg>

@@ -8,7 +8,8 @@
   let SVGlength
   let dx=0;
   let dy=0;
-  export let unScaledValue = 0
+  export let unScaledValue = 0;
+  export let mobileDevice;
   let valueLength = unScaledValue.toString().length
   let barCountOffsetX,barCountFontSize,barCountOffsetY,graphNumInner,graphNumAbove;
   if (valueLength === 1) {
@@ -35,6 +36,7 @@
     graphNumInner = true;
   }
 
+
   export let index = 0;
   export let barWidth = 20;
   export let barSpace = 20;
@@ -54,7 +56,11 @@
     let length = SVGlength.getBBox().width
     dy = -length/1.5;
     dx = -length/1.5;
+    if (mobileDevice){
+      dy-=40;
+    }
   })
+  
 
 </script>
 
