@@ -11,24 +11,26 @@
     {x}
     {y}
   >
-    <div class="word-groups-inner-container">
-      <div class='text-holder'>
-        <div 
-          class='num-header'
-          class:twoDigit={count[0].length>1}
-        >
-          {count[0]}
+    <body xlmns="http://www.w3.org/1999/xhtml">
+      <div class="word-groups-inner-container">
+        <div class='text-holder'>
+          <div 
+            class='num-header'
+            class:twoDigit={count[0].length>1}
+          >
+            {count[0]}
+          </div>
+          <p class="words">{count[1].join(' ')}</p>
         </div>
-        <p class="words">{count[1].join(' ')}</p>
       </div>
-    </div>
+    </body>
   </foreignObject>
 
 <style>
   .word-groups-inner-container{
-    /* position: absolute;
+    position: fixed;
     top: 0;
-    left: 0; */
+    left: 0;
     width:100%;
     height:100%;
     overflow-y: scroll;
@@ -48,11 +50,6 @@
     margin:0;
     overflow-wrap: normal;
     z-index:1;
-    /* position: absolute;
-    top: 0;
-    left: 0;
-    width: 80%;
-    margin-left: 10%; */
   }
   
   .word-groups-inner-container::-webkit-scrollbar {
