@@ -6,6 +6,8 @@
     import handleCookie from'./cookieUtils.js'
     export let searchError;
     export let centered = true;
+    const mobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobi/i.test(navigator.userAgent)
+    // const mobileDevice=false;
     let button, search;
     let strokeWidth = 4;
     $: strokeWidth = centered ? 4 : 2;
@@ -164,7 +166,7 @@
             bind:value={searchText}
             maxlength="51">
             
-        <Autocomplete {searchText} {centered} {showDropdown} {topResults} {selectedIndex} 
+        <Autocomplete {searchText} {centered} {showDropdown} {topResults} {selectedIndex} {mobileDevice}
             on:entryHover={handleEntryHover}
             on:entryClick={handleEntryClick}/>
     </div>      

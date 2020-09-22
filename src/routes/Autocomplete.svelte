@@ -6,6 +6,8 @@
   export let topResults = [];
   export let selectedIndex = 0;
   export let showDropdown = false;
+  // export let mobileDevice;
+  // const mobileDevice = false;
 
   function truncateFollowers(number){
     let reduced = Number(number).toLocaleString();
@@ -27,6 +29,7 @@
   function handleClick(i){
     dispatch('entryClick',{index:i})
   }
+  const mobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobi/i.test(navigator.userAgent)
 
 </script>
 
@@ -35,6 +38,7 @@
     in:fade="{{duration:200}}" 
     class="dropdown" 
     class:centered
+    class:mobileDevice
     class:firstHover="{selectedIndex===0}">
     {#if topResults.length === 0}
       <div 
@@ -86,6 +90,10 @@
     overflow:visible;   
     border-bottom-left-radius: 12.5px;
     border-bottom-right-radius: 12.5px;
+  }
+
+  .dropdown.mobileDevice{
+    min-height: 1rem;
   }
 
   .dropdown.centered .entry.lastChild {

@@ -149,7 +149,7 @@
       on:panend={handlePanEnd}
       bind:this={plotWindow}>
       <Barplot {plotHeight} {windowWidth} {user} {scaleDims} {userInDB} {autoCompleteObject}
-        on:plotWidthChange={handleScroll} {mobileDevice}/>
+        on:plotWidthChange={handleScroll}/>
     </div>
     {#if mobileDevice}
       <div class="plot-arrow"

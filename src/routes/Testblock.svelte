@@ -41,8 +41,8 @@
     width:100%;
     height:100%;    
   }
-  .word-groups-inner-container{
 
+  .word-groups-inner-container{
     position: fixed;
     top: 0;
     left: 0;

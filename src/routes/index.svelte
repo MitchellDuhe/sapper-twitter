@@ -117,6 +117,10 @@
 </div>
 
 <style>
+
+	.graph-container{
+		z-index: 0;
+	}
 	.searchbar-container.centered{
 		left:50%;
 		top:33%;
