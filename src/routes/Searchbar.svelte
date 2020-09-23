@@ -6,8 +6,8 @@
     import handleCookie from'./cookieUtils.js'
     export let searchError;
     export let centered = true;
-    const mobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobi/i.test(navigator.userAgent)
-    // const mobileDevice=false;
+    // const mobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobi/i.test(navigator.userAgent)
+    export let mobileDevice;
     let button, search;
     let strokeWidth = 4;
     $: strokeWidth = centered ? 4 : 2;

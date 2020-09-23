@@ -21,10 +21,14 @@
 	import createAutoComplete from './autoComplete.js';
 	import Autocomplete from './Autocomplete.svelte';
 	let autoCompleteObject;
+  let mobileDevice;
+
 	onMount(()=>{
 		if (!(users === undefined)){
 			retryAutocomplete(0);
 		}
+		mobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobi/i.test(navigator.userAgent)
+		// console.log(mobileDevice)
 	})
 	
 	let centered=true;
@@ -107,11 +111,11 @@
 		<Searchbar 
 			on:decenter={decenter} 
 			on:clearError={clearError}
-			{centered} {searchError}/>
+			{centered} {searchError} {mobileDevice}/>
 	</div>
 	{#if !centered }
 		<div class="graph-container">
-			<Plot {user} {displayedSearch} {userInDB} {autoCompleteObject}/>
+			<Plot {user} {displayedSearch} {userInDB} {autoCompleteObject} {mobileDevice}/>
 		</div>
 	{/if}
 </div>

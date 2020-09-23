@@ -29,8 +29,9 @@
   function handleClick(i){
     dispatch('entryClick',{index:i})
   }
-  const mobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobi/i.test(navigator.userAgent)
-
+  // const mobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobi/i.test(navigator.userAgent)
+  // const mobileDevice = false;
+  export let mobileDevice
 </script>
 
 {#if searchText.length > 0 && showDropdown}

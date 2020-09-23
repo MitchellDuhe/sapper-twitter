@@ -8,8 +8,8 @@
   export let user;
   export let userInDB;
   export let autoCompleteObject;
-  const mobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobi/i.test(navigator.userAgent)
-
+  // const mobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobi/i.test(navigator.userAgent)
+  export let mobileDevice;
   let plotWindow;
   //==================
   //      axis
