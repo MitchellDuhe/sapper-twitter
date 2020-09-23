@@ -94,7 +94,7 @@
   }
 
   .dropdown.mobileDevice{
-    min-height: 1rem;
+    min-height: 2rem;
   }
 
   .dropdown.centered .entry.lastChild {
