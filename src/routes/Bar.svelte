@@ -57,7 +57,7 @@
     dy = -length/1.5;
     dx = -length/1.5;
     if (mobileDevice){
-      dy-=40;
+      dy-=140;
     }
   })
   

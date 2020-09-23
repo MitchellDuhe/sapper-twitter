@@ -96,6 +96,9 @@
   .dropdown.mobileDevice{
     min-height: 2rem;
   }
+  .dropdown.centered.mobileDevice{
+    min-height: 6rem;
+  }
 
   .dropdown.centered .entry.lastChild {
     border-bottom-left-radius:25px;
