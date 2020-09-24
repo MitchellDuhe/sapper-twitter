@@ -58,7 +58,8 @@
     dy = -length/1.5;
     dx = -length/1.5;
     if (mobileDevice){
-      dyAdd=40;
+      dy-=40;
+      console.log(text,dx,dy,barCountOffsetX,barCountOffsetY)
     }
   })
   
@@ -86,7 +87,7 @@
       {unScaledValue}
     </text>
     <text 
-      style={`transform:translate(${dx}px,${dy + dyAdd}px) rotate(45deg) scaleY(-1);`}
+      style={`transform:translate(${dx}px,${dy}px) rotate(45deg) scaleY(-1);`}
       class="word"
       bind:this={SVGlength}>
         {text}

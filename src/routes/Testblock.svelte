@@ -16,7 +16,7 @@
     {x}
     {y}
   >
-    <body xlmns="http://www.w3.org/1999/xhtml"
+    <body class="foreign-body" xlmns="http://www.w3.org/1999/xhtml"
       class:mobileDevice>
       <div class="word-groups-inner-container">
         <div class='text-holder'>
@@ -38,6 +38,8 @@
     position: fixed;
     top: 0;
     left: 0;
+    margin:0;
+    padding:0;
     width:100%;
     height:100%;
     overflow-y: scroll;
@@ -48,7 +50,12 @@
     display: block;
   }
 
-  body.mobileDevice{
+  .foreign-body{
+    position:relative;
+    display: flex;
+  }
+
+  .foreign-body.mobileDevice{
     transform: scaleY(-1);
   }
   

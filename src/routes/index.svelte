@@ -16,7 +16,7 @@
 	import { onMount } from 'svelte'
 	import Searchbar from './Searchbar.svelte'
 	import Plot from './Plot.svelte'
-  import { userTweetData } from './userTweetData.js'
+  	import { userTweetData } from './userTweetData.js'
 
 	import createAutoComplete from './autoComplete.js';
 	import Autocomplete from './Autocomplete.svelte';
