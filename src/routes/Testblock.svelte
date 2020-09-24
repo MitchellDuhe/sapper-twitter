@@ -4,22 +4,21 @@
   export let initialOffset;
   export let mobileDevice;
   let x = initialOffset + index*(250+100); //make x the offset of all the used bars so far + the groupwidths
-  let y = '-100%';
-  let height = mobileDevice ? '80%' : '90%'
+  let y = '-100%'; 
+  let height = mobileDevice ? '500px' : '90%';
+  console.log(mobileDevice)
 
 
 </script>
 
 
-  <foreignObject xlmns="http://www.w3.org/1999/xhtml" class="word-groups" width=1 height=1
+  <foreignObject class="word-groups" width="250px" {height}
     {x}
     {y}
   >
-    <body xlmns="http://www.w3.org/1999/xhtml">
-      <div 
-        class="word-groups-inner-container"
-        class:mobileDevice
-      >
+    <body xlmns="http://www.w3.org/1999/xhtml"
+      class:mobileDevice>
+      <div class="word-groups-inner-container">
         <div class='text-holder'>
           <div 
             class='num-header'
@@ -34,25 +33,13 @@
   </foreignObject>
 
 <style>
-  body{
-    position: fixed;
-    top: 0;
-    left: 0;  
-    margin:0;
-    width:100%;
-    height:100%;  
-    border-radius: 15px;
-    padding:0;
-  }
-
   .word-groups-inner-container{
-    width:250px;
-    height:100px;  
+
     position: fixed;
     top: 0;
     left: 0;
-    width:250px;
-    height:100px;
+    width:100%;
+    height:100%;
     overflow-y: scroll;
     scrollbar-width: thin;
     scrollbar-color: var(--dark-color) var(--lighter-color);
@@ -61,10 +48,10 @@
     display: block;
   }
 
-  .word-groups-inner-container.mobileDevice{
-    transform:scaleY(-1);
+  body.mobileDevice{
+    transform: scaleY(-1);
   }
-
+  
   .words{
     padding-bottom:1rem;
     line-height:2.5rem;
@@ -92,12 +79,14 @@
   }
 
   .word-groups {
-    overflow:visible;
+    /* width:250px;
+    height:90%; */
     position:relative;
-    /* background-color:var(--plot-colorful);
-    background: linear-gradient(var(--plot-colorful) 50%, var(--plot-colorful-secondary) 100%); */
+    background-color:var(--plot-colorful);
+    background: linear-gradient(var(--plot-colorful) 50%, var(--plot-colorful-secondary) 100%);
     transform: scaleY(-1);
     border-radius: 15px;
+    /* overflow-y: scroll; */
   }
 
   .text-holder {
@@ -122,6 +111,5 @@
     margin-left:-30px;
     margin-top:30px;
   }
-
 
 </style>
