@@ -58,7 +58,7 @@
     dy = -length/1.5;
     dx = -length/1.5;
     if (mobileDevice){
-      dy-=40;
+      dy=dy-40;
       console.log(text,dx,dy,barCountOffsetX,barCountOffsetY)
     }
   })

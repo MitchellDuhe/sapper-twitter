@@ -56,7 +56,7 @@
   }
 
   .foreign-body.mobileDevice{
-    transform: scaleY(-1);
+    /* transform: scaleY(-1); */
   }
   
   .words{
