@@ -8,6 +8,7 @@
   let SVGlength
   let dx=0;
   let dy=0;
+  let dyAdd = 0;
   export let unScaledValue = 0;
   export let mobileDevice;
   let valueLength = unScaledValue.toString().length
@@ -57,7 +58,7 @@
     dy = -length/1.5;
     dx = -length/1.5;
     if (mobileDevice){
-      dy-=140;
+      dyAdd=40;
     }
   })
   
@@ -85,7 +86,7 @@
       {unScaledValue}
     </text>
     <text 
-      style={`transform:translate(${dx}px,${dy}px) rotate(45deg) scaleY(-1);`}
+      style={`transform:translate(${dx}px,${dy + dyAdd}px) rotate(45deg) scaleY(-1);`}
       class="word"
       bind:this={SVGlength}>
         {text}

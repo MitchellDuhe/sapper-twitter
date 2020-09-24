@@ -11,7 +11,7 @@
 </script>
 
 
-  <foreignObject xlmns="http://www.w3.org/1999/xhtml" class="word-groups" width="250px" {height}
+  <foreignObject xlmns="http://www.w3.org/1999/xhtml" class="word-groups" width=1 height=1
     {x}
     {y}
   >
@@ -37,17 +37,22 @@
   body{
     position: fixed;
     top: 0;
-    left: 0;
+    left: 0;  
+    margin:0;
     width:100%;
-    height:100%;    
+    height:100%;  
+    border-radius: 15px;
+    padding:0;
   }
 
   .word-groups-inner-container{
+    width:250px;
+    height:100px;  
     position: fixed;
     top: 0;
     left: 0;
-    width:100%;
-    height:100%;
+    width:250px;
+    height:100px;
     overflow-y: scroll;
     scrollbar-width: thin;
     scrollbar-color: var(--dark-color) var(--lighter-color);
@@ -87,14 +92,12 @@
   }
 
   .word-groups {
-    /* width:250px;
-    height:90%; */
+    overflow:visible;
     position:relative;
-    background-color:var(--plot-colorful);
-    background: linear-gradient(var(--plot-colorful) 50%, var(--plot-colorful-secondary) 100%);
+    /* background-color:var(--plot-colorful);
+    background: linear-gradient(var(--plot-colorful) 50%, var(--plot-colorful-secondary) 100%); */
     transform: scaleY(-1);
     border-radius: 15px;
-    /* overflow-y: scroll; */
   }
 
   .text-holder {
