@@ -25,8 +25,8 @@ function getCookie(cookieName) {
     return cookie.trim().indexOf(cookieName) === 0
   })
   
-  _id = _id.trim();
   if (_id === undefined ) return false 
+  _id = _id.trim();
   return _id.substring(cookieName.length)
 }
 
