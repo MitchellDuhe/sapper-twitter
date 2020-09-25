@@ -136,6 +136,11 @@
     const handleFocus = ()=>{
         showDropdown=true
         dispatch('clearError');
+        dispatch('searchFocus')
+    }
+    
+    const handleBlur = ()=>{
+        dispatch('searchBlur')
     }
 
 </script>
@@ -160,6 +165,7 @@
             placeholder="Enter Twitter User"
             on:autoComplete={handleAutoComplete}
             on:focus={handleFocus}
+            on:blur={handleBlur}
             on:keydown={handleKeydown}
             on:keyup={handleKeyup}
             bind:this={search}
