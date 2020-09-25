@@ -28,12 +28,12 @@
 			retryAutocomplete(0);
 		}
 		mobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobi/i.test(navigator.userAgent)
-		// console.log(mobileDevice)
+		// mobileDevice = false;
 	})
 	
 	let centered=true;
 	let user = {handle:'none-selected'};
-	let displayedSearch;
+	let displayedSearch;git
 	let userInDB;
 	let handleRegex = /[^a-zA-Z0-9\_]/g;
 	let searchValue;
@@ -98,19 +98,26 @@
 	// 	})
 	// 	console.log(autoCompleteObject)
 	// }
+	let searchbarFocus=false;
 </script>
 
 <!-- <button 
 	bind:this={testButton}
 	on:click={handleClick}>test</button> -->
+	<!-- on:blur={()=>searchbarFocus=false} -->
+
 <div class="content">
 	<div 
 		class:centered
 		class:decentered={!centered}
+		class:searchbarFocus
+		class:mobileDevice
+		on:clearError={clearError}
 		class="searchbar-container centered">
 		<Searchbar 
 			on:decenter={decenter} 
-			on:clearError={clearError}
+			on:searchFocus={()=>searchbarFocus=true} 
+			on:searchBlur={()=>searchbarFocus=false} 
 			{centered} {searchError} {mobileDevice}/>
 	</div>
 	{#if !centered }
@@ -130,6 +137,11 @@
 		top:33%;
 		transform: translate(-50%,-50%);
 	}
+
+	.searchbar-container.centered.searchbarFocus.mobileDevice{
+		top:15%;
+	}
+
 	.searchbar-container{
 		z-index: 1;
 		position:absolute;
