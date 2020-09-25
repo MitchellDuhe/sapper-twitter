@@ -8,7 +8,7 @@
   let height = mobileDevice ? '500px' : '90%';
   console.log(mobileDevice)
 
-
+ 
 </script>
 
 

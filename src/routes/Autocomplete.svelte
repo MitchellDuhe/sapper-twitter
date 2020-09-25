@@ -79,7 +79,8 @@
   .dropdown.firstHover{
     transition: 200ms ease, border-radius 0ms 0ms;
     background-color:  var(--light-color);
-  }
+  } 
+  
   .dropdown{
     background-color:  var(--lighter-color);
     display: flex;

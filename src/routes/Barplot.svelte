@@ -10,6 +10,7 @@
 	//===============
 	//     init
 	//===============
+	
 	let loadingText = 'Loading Plot...' 
 	let wordCount = [[0,0]];
 	let countCount = {};

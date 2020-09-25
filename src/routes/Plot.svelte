@@ -4,7 +4,6 @@
   import Barplot from './Barplot.svelte'
   import { userTweetData } from './userTweetData.js'
   
-  
   export let user;
   export let userInDB;
   export let autoCompleteObject;

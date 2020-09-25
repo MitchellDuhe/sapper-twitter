@@ -3,7 +3,7 @@
   import * as easings from 'svelte/easing';
   import { onMount } from 'svelte';
 
-  
+   
   let x,y;
   let SVGlength
   let dx=0;
