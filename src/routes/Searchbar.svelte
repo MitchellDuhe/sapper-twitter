@@ -11,7 +11,7 @@
     let button, search;
     let strokeWidth = 4;
     $: strokeWidth = centered ? 4 : 2; 
-    
+     
     //================
 	//   searchning
 	//================

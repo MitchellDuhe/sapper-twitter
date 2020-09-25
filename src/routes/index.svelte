@@ -125,7 +125,7 @@
 			<Plot {user} {displayedSearch} {userInDB} {autoCompleteObject} {mobileDevice}/>
 		</div>
 	{/if}
-</div>
+</div> 
 
 <style>
 
