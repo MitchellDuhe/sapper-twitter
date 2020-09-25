@@ -33,7 +33,7 @@
 	
 	let centered=true;
 	let user = {handle:'none-selected'};
-	let displayedSearch;git
+	let displayedSearch;
 	let userInDB;
 	let handleRegex = /[^a-zA-Z0-9\_]/g;
 	let searchValue;
