@@ -10,7 +10,7 @@
     export let mobileDevice;
     let button, search;
     let strokeWidth = 4;
-    $: strokeWidth = centered ? 4 : 2;
+    $: strokeWidth = centered ? 4 : 2; 
     
     //================
 	//   searchning
