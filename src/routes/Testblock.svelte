@@ -53,6 +53,8 @@
   .foreign-body{
     position:relative;
     display: flex;
+    top: 0;
+    left:0;
   }
 
   .foreign-body.mobileDevice{
@@ -60,6 +62,8 @@
   }
   
   .words{
+    top:0;
+    left:0;
     padding-bottom:1rem;
     line-height:2.5rem;
     font-size:20px;
@@ -97,13 +101,16 @@
   }
 
   .text-holder {
-    position: relative;
+    position: absolute;
+    top:0;
+    left:0;
     display: flex;
     flex-direction: column;
     width:100%;
     height:100%;
     box-sizing: border-box;
     padding:20px;
+
   }
   .num-header {
     position: absolute;

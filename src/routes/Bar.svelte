@@ -75,8 +75,8 @@
     height={Math.abs($height)} 
     class="graph-bar">
   </rect>
-  <g
-    style="transform:translateX({x+barWidth/2}px)"
+  <g class="word-and-number"
+    style="transform:translate({x+barWidth/2}px,-40px)"
     y=-5> 
     <text 
       style={`transform:translate(${barCountOffsetX}px,${Math.abs($height)+barCountOffsetY}px) scaleY(-1);
@@ -95,7 +95,7 @@
   </g>
 </g>
 
-<style>  
+<style> 
   .word{
     transform-origin: 30px 0px;
     fill: #333;
