@@ -38,10 +38,10 @@
 <style>
   .word-groups-inner-container{
     position: fixed;
-    top: 0;
-    left: 0;
-    margin:0;
-    padding:0;
+    top: 0px;
+    left: 0px;
+    margin:0px;
+    padding:0px;
     width:100%;
     height:100%;
     overflow-y: scroll;
@@ -55,8 +55,8 @@
   .foreign-body{
     position:relative;
     display: flex;
-    top: 0;
-    left:0;
+    top: 0px;
+    left:0px;
   }
 
   .foreign-body.mobileDevice{
@@ -64,15 +64,15 @@
   }
   
   .words{
-    top:0;
-    left:0;
+    top:0px;
+    left:0px;
     padding-bottom:1rem;
     line-height:2.5rem;
     font-size:20px;
     color: var(--plot-background);
     font-weight: bold;
     text-align:justify;
-    margin:0;
+    margin:0px;
     overflow-wrap: normal;
     z-index:1;
   }
@@ -104,8 +104,8 @@
 
   .text-holder {
     position: absolute;
-    top:0;
-    left:0;
+    top:0px;
+    left:0px;
     display: flex;
     flex-direction: column;
     width:100%;
@@ -116,7 +116,7 @@
   }
   .num-header {
     position: absolute;
-    margin:0 auto;
+    margin:0px auto;
     font-size:250px;
     font-weight:bold;
     color:rgba(255, 255, 255, 0.1);

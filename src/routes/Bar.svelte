@@ -56,7 +56,7 @@
   onMount(()=>{
     let length = SVGlength.getBBox().width
     dy = -length/1.5;
-    dx = -length/1.5;
+    dx = -length/3;
     if (mobileDevice){
       dy=dy-40;
       console.log(text,dx,dy,barCountOffsetX,barCountOffsetY)
@@ -76,22 +76,25 @@
     class="graph-bar">
   </rect>
   <g class="word-and-number"
-    style="transform:translate({x+barWidth/2}px,-40px)"
+    style="transform:translate({x+barWidth/2}px,-0px)"
     y=-5> 
-    <text 
+    <g
       style={`transform:translate(${barCountOffsetX}px,${Math.abs($height)+barCountOffsetY}px) scaleY(-1);
-              font-size:${barCountFontSize}px;`}
+      font-size:${barCountFontSize}px;`}>
+      <text 
       class="graph-num"
       class:graphNumInner
       class:graphNumAbove>
       {unScaledValue}
     </text>
+  </g>
+  <g style={`transform:translate(${dx}px,${dy-20}px) rotate(45deg) scaleY(-1);`}>
     <text 
-      style={`transform:translate(${dx}px,${dy}px) rotate(45deg) scaleY(-1);`}
-      class="word"
-      bind:this={SVGlength}>
-        {text}
-    </text>
+    class="word"
+    bind:this={SVGlength}>
+    {text}
+  </text>
+</g>
   </g>
 </g>
 
