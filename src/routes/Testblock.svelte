@@ -142,9 +142,6 @@
   .word-groups-inner-container.mobileDevice,
   .text-holder.mobileDevice,
   .num-header.mobileDevice{
-    position:absolute;
     height:500px;
-    top:0;
-    left:0;
   }
 </style>
