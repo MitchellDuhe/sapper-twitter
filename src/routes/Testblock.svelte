@@ -18,15 +18,18 @@
   >
     <body class="foreign-body" xlmns="http://www.w3.org/1999/xhtml"
       class:mobileDevice>
-      <div class="word-groups-inner-container">
-        <div class='text-holder'>
+      <div class="word-groups-inner-container"
+        class:mobileDevice>
+        <div class='text-holder'
+          class:mobileDevice> 
           <div 
             class='num-header'
+            class:mobileDevice
             class:twoDigit={count[0].length>1}
           >
             {count[0]}
           </div>
-          <p class="words">{count[1].join(' ')}</p>
+      <p class="words" class:mobileDevice>{count[1].join(' ')}</p>
         </div>
       </div>
     </body>
@@ -34,7 +37,6 @@
 
 <style>
   .word-groups-inner-container{
-
     position: fixed;
     top: 0;
     left: 0;
@@ -126,4 +128,13 @@
     margin-top:30px;
   }
 
+  .foreign-body.mobileDevice,
+  .word-groups-inner-container.mobileDevice,
+  .text-holder.mobileDevice,
+  .num-header.mobileDevice{
+    position:absolute;
+    height:500px;
+    top:0;
+    left:0;
+  }
 </style>
