@@ -18,7 +18,11 @@
   >
     <body class="foreign-body" xlmns="http://www.w3.org/1999/xhtml"
       class:mobileDevice>
-      <div> test </div>
+      <div class="test">
+        <p class="test">
+          test
+        </p>
+      </div>
       <div class="word-groups-inner-container"
         class:mobileDevice>
         <div class='text-holder'
@@ -37,6 +41,11 @@
   </foreignObject>
 
 <style>
+
+  .test{
+    z-index:2;
+  }
+
   .word-groups-inner-container{
     position: fixed;
     top: 0;
