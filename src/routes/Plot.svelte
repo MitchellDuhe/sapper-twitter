@@ -115,6 +115,9 @@
       distanceToEnd = 50;
     }
   }
+  function scrollToEnd(){
+    plotWindow.scrollLeft+=100;
+  }
 
   export let displayedSearch;
 </script>
@@ -129,7 +132,7 @@
     {#if $userTweetData.userPic !== undefined}
       <a target='_blank' href={$userTweetData.userPic}><img class="profile-pic" src={$userTweetData.userPic} alt="profile_pic"></a>
     {/if}
-    <span>{ displayedSearch } Weekly Word Usage. ({$userTweetData.nTweets} Tweets)</span>
+    <span on:click={scrollToEnd}>{ displayedSearch } Weekly Word Usage. ({$userTweetData.nTweets} Tweets)</span>
   </div>
   <div class="plot-and-axis">
     <svg

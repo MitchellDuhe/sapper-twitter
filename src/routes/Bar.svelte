@@ -17,7 +17,7 @@
     barCountOffsetX = -6;
     barCountFontSize = 22;
   } else if (valueLength === 2) {
-    barCountOffsetX = -11;
+    barCountOffsetX = -12;
     barCountFontSize = 20;
   } else if (valueLength === 3) {
     barCountOffsetX = -14;
@@ -57,10 +57,6 @@
     let length = SVGlength.getBBox().width
     dy = -length/1.5;
     dx = -length/3;
-    if (mobileDevice){
-      dy=dy-40;
-      console.log(text,dx,dy,barCountOffsetX,barCountOffsetY)
-    }
   })
   
 
