@@ -54,7 +54,7 @@
 
   .foreign-body{
     position:relative;
-    display: flex;
+    display: inline-block;
     justify-content: start;
     top: 0px;
     left:0px;
@@ -108,7 +108,7 @@
     position: relative;
     top:0px;
     left:0px;
-    display: flex;
+    display: inline-block;
     flex-direction: column;
     justify-content: start;
     width:100%;
