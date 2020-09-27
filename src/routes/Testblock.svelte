@@ -55,6 +55,7 @@
   .foreign-body{
     position:relative;
     display: flex;
+    justify-content: start;
     top: 0px;
     left:0px;
   }
@@ -64,6 +65,7 @@
   }
   
   .words{
+    position:absolute;
     top:0px;
     left:0px;
     padding-bottom:1rem;
@@ -72,7 +74,7 @@
     color: var(--plot-background);
     font-weight: bold;
     text-align:justify;
-    margin:0px;
+    margin:20px;
     overflow-wrap: normal;
     z-index:1;
   }
@@ -103,11 +105,12 @@
   }
 
   .text-holder {
-    position: absolute;
+    position: relative;
     top:0px;
     left:0px;
     display: flex;
     flex-direction: column;
+    justify-content: start;
     width:100%;
     height:100%;
     box-sizing: border-box;
@@ -115,7 +118,7 @@
 
   }
   .num-header {
-    position: absolute;
+    position: relative;
     margin:0px auto;
     font-size:250px;
     font-weight:bold;
@@ -124,7 +127,7 @@
 
   .num-header.twoDigit {
     font-size: 200px;
-    margin-left:-30px;
+    margin-left:-25px;
     margin-top:30px;
   }
 
