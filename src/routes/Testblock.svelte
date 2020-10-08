@@ -63,11 +63,13 @@
   }
   .word-groups-inner-container.isSafari{
     transform: scaleY(-1);
+    top:4%;
+    border-radius: 15px;
   }
 
-  .foreign-body.mobileDevice{
+  /* .foreign-body.mobileDevice{
     transform: scaleY(-1);
-  }
+  } */
   
   .words{
     position:absolute;
