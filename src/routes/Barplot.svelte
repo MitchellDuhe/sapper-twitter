@@ -22,10 +22,13 @@
 	export let mobileDevice;
 
 	function waitX(t){ 
-    return new Promise((resolve,reject)=>{
-      setTimeout(resolve,t)
-    });
+		return new Promise((resolve,reject)=>{
+		setTimeout(resolve,t)
+		});
 	}
+
+	let isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
 	//================
 	//		plot dims
 	//================
@@ -38,6 +41,8 @@
 	let plotWidth;
 	let fullWordList = true;
 	let barsWidth;
+
+
 
 	const getPlotWidth = (waiting)=>{
 		fullWordList = $userTweetData.length < 100
@@ -263,7 +268,7 @@
 	{/each}
 	{#if !waiting}
 		{#each 	wordBlocks as count,index} 
-			<Testblock initialOffset={barsWidth + 100} {count} {index} {mobileDevice}/>
+			<Testblock initialOffset={barsWidth + 100} {count} {index} {mobileDevice} {isSafari}/>
 		{/each}
 	{/if}
 </svg>

@@ -3,6 +3,7 @@
   export let index;
   export let initialOffset;
   export let mobileDevice;
+  export let isSafari;
   let x = initialOffset + index*(250+100); //make x the offset of all the used bars so far + the groupwidths
   let y = '-100%'; 
   let height = mobileDevice ? '500px' : '90%';
@@ -19,7 +20,8 @@
     <body class="foreign-body" xlmns="http://www.w3.org/1999/xhtml"
       class:mobileDevice>
       <div class="word-groups-inner-container"
-        class:mobileDevice>
+        class:mobileDevice
+        class:isSafari>
         <div class='text-holder'
           class:mobileDevice> 
           <div 
@@ -58,6 +60,9 @@
     justify-content: start;
     top: 0px;
     left:0px;
+  }
+  .word-groups-inner-container.isSafari{
+    transform: scaleY(-1);
   }
 
   .foreign-body.mobileDevice{
